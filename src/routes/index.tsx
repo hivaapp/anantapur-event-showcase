@@ -10,37 +10,6 @@ import { services } from "@/lib/services";
 import { WHATSAPP_URL } from "@/lib/contact";
 import heroImg from "@/assets/hero-wedding.jpg";
 
-const testimonials = [
-  {
-    name: "Lakshmi Priya",
-    event: "Wedding — Anantapur",
-    quote:
-      "Varna Utsav turned our mandap into a dream. Every marigold, every drape was arranged with such love. Guests are still talking about the decor!",
-    rating: 5,
-  },
-  {
-    name: "Ravi Kumar",
-    event: "Engagement — Hindupur",
-    quote:
-      "From the first WhatsApp message to the final pookalam, the team was incredible. Transparent pricing and flawless execution.",
-    rating: 5,
-  },
-  {
-    name: "Sushma Reddy",
-    event: "Cradle Ceremony",
-    quote:
-      "They designed the cutest pastel theme for our baby's naming ceremony. Affordable, punctual, and absolutely magical.",
-    rating: 5,
-  },
-  {
-    name: "Naveen & Ashwini",
-    event: "Haldi + Reception",
-    quote:
-      "Two events in two days — and both were perfect. Creative themes, fresh flowers, and the most caring crew in Anantapur.",
-    rating: 5,
-  },
-];
-
 const faqs = [
   {
     q: "Which areas do you serve?",
