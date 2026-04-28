@@ -206,6 +206,39 @@ function Index() {
           </div>
         </section>
 
+        {/* TESTIMONIALS */}
+        <TestimonialsSection />
+
+        {/* FAQ */}
+        <section className="py-20 px-6 lg:px-10">
+          <div className="max-w-4xl mx-auto">
+            <Reveal variant="up" className="text-center mb-12">
+              <p className="text-xs uppercase tracking-widest text-marigold font-bold mb-2">Questions</p>
+              <h2 className="text-4xl lg:text-5xl font-serif italic">Frequently Asked</h2>
+              <p className="mt-4 text-muted-foreground">Quick answers — or chat with us directly on WhatsApp.</p>
+            </Reveal>
+
+            <Reveal variant="up" delay={120}>
+              <Accordion type="single" collapsible className="w-full space-y-3">
+                {faqs.map((f, i) => (
+                  <AccordionItem
+                    key={f.q}
+                    value={`item-${i}`}
+                    className="border border-border rounded-2xl bg-card/60 backdrop-blur px-5 data-[state=open]:shadow-xl data-[state=open]:shadow-marigold/10 data-[state=open]:border-marigold/40 transition-all duration-500"
+                  >
+                    <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-5 hover:text-marigold transition-colors">
+                      {f.q}
+                    </AccordionTrigger>
+                    <AccordionContent className="text-muted-foreground leading-relaxed pb-5">
+                      {f.a}
+                    </AccordionContent>
+                  </AccordionItem>
+                ))}
+              </Accordion>
+            </Reveal>
+          </div>
+        </section>
+
         {/* CTA */}
         <section className="py-20 px-6 lg:px-10">
           <Reveal variant="scale">
