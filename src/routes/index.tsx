@@ -1,10 +1,10 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
-import { ArrowRight, Sparkles, Heart, Award, Quote, ChevronLeft, ChevronRight, Star } from "lucide-react";
+import { ArrowRight, Sparkles, Heart, Award } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingActions } from "@/components/FloatingActions";
 import { Reveal } from "@/components/Reveal";
+import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { services } from "@/lib/services";
 import { WHATSAPP_URL } from "@/lib/contact";
