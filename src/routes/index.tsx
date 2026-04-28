@@ -1,12 +1,68 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { ArrowRight, Sparkles, Heart, Award } from "lucide-react";
+import { useEffect, useState } from "react";
+import { ArrowRight, Sparkles, Heart, Award, Quote, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingActions } from "@/components/FloatingActions";
 import { Reveal } from "@/components/Reveal";
+import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { services } from "@/lib/services";
 import { WHATSAPP_URL } from "@/lib/contact";
 import heroImg from "@/assets/hero-wedding.jpg";
+
+const testimonials = [
+  {
+    name: "Lakshmi Priya",
+    event: "Wedding — Anantapur",
+    quote:
+      "Varna Utsav turned our mandap into a dream. Every marigold, every drape was arranged with such love. Guests are still talking about the decor!",
+    rating: 5,
+  },
+  {
+    name: "Ravi Kumar",
+    event: "Engagement — Hindupur",
+    quote:
+      "From the first WhatsApp message to the final pookalam, the team was incredible. Transparent pricing and flawless execution.",
+    rating: 5,
+  },
+  {
+    name: "Sushma Reddy",
+    event: "Cradle Ceremony",
+    quote:
+      "They designed the cutest pastel theme for our baby's naming ceremony. Affordable, punctual, and absolutely magical.",
+    rating: 5,
+  },
+  {
+    name: "Naveen & Ashwini",
+    event: "Haldi + Reception",
+    quote:
+      "Two events in two days — and both were perfect. Creative themes, fresh flowers, and the most caring crew in Anantapur.",
+    rating: 5,
+  },
+];
+
+const faqs = [
+  {
+    q: "Which areas do you serve?",
+    a: "We are based in Anantapur and regularly decorate events across Hindupur, Tadipatri, Dharmavaram, Kadiri, and nearby towns in the Rayalaseema region.",
+  },
+  {
+    q: "How early should I book?",
+    a: "For weddings we recommend booking 4–8 weeks in advance. For smaller functions like birthdays, haldi, or cradle ceremonies, 1–2 weeks is usually enough.",
+  },
+  {
+    q: "Do you offer customized themes?",
+    a: "Absolutely. Every event is designed around your story — traditional South Indian, pastel modern, floral minimalist, or a theme of your choice. Send us inspiration on WhatsApp and we'll curate a moodboard.",
+  },
+  {
+    q: "What does the starting price include?",
+    a: "Starting prices cover stage decor, entrance arch, and essential floral arrangements for a standard venue. Final quotes depend on venue size, flower selection, and theme complexity.",
+  },
+  {
+    q: "How do I get a quote?",
+    a: "The fastest way is WhatsApp — share your date, venue, and a reference image. We'll reply with a free customized quote within a few hours.",
+  },
+];
 
 export const Route = createFileRoute("/")({
   head: () => ({
