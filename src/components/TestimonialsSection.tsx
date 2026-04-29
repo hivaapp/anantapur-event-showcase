@@ -1,46 +1,25 @@
 import { useEffect, useState } from "react";
 import { Quote, ChevronLeft, ChevronRight, Star } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
-
-const testimonials = [
-  {
-    name: "Lakshmi Priya",
-    event: "Wedding — Anantapur",
-    quote:
-      "Varna Utsav turned our mandap into a dream. Every marigold, every drape was arranged with such love. Guests are still talking about the decor!",
-    rating: 5,
-  },
-  {
-    name: "Ravi Kumar",
-    event: "Engagement — Hindupur",
-    quote:
-      "From the first WhatsApp message to the final pookalam, the team was incredible. Transparent pricing and flawless execution.",
-    rating: 5,
-  },
-  {
-    name: "Sushma Reddy",
-    event: "Cradle Ceremony",
-    quote:
-      "They designed the cutest pastel theme for our baby's naming ceremony. Affordable, punctual, and absolutely magical.",
-    rating: 5,
-  },
-  {
-    name: "Naveen & Ashwini",
-    event: "Haldi + Reception",
-    quote:
-      "Two events in two days — and both were perfect. Creative themes, fresh flowers, and the most caring crew in Anantapur.",
-    rating: 5,
-  },
-];
+import { useContent } from "@/lib/content";
 
 export function TestimonialsSection() {
+  const { content } = useContent();
+  const testimonials = content.testimonials;
   const [idx, setIdx] = useState(0);
   const count = testimonials.length;
 
   useEffect(() => {
+    if (count < 2) return;
     const id = setInterval(() => setIdx((i) => (i + 1) % count), 6000);
     return () => clearInterval(id);
   }, [count]);
+
+  useEffect(() => {
+    if (idx >= count) setIdx(0);
+  }, [count, idx]);
+
+  if (count === 0) return null;
 
   const go = (dir: number) => setIdx((i) => (i + dir + count) % count);
 
@@ -63,7 +42,7 @@ export function TestimonialsSection() {
                 style={{ transform: `translateX(-${idx * 100}%)` }}
               >
                 {testimonials.map((t) => (
-                  <div key={t.name} className="min-w-full px-2 sm:px-8">
+                  <div key={t.id} className="min-w-full px-2 sm:px-8">
                     <div className="relative p-8 sm:p-12 rounded-[2rem] bg-card/70 backdrop-blur border border-border shadow-xl shine-overlay">
                       <Quote className="absolute top-6 right-6 size-12 text-marigold/20" />
                       <div className="flex gap-1 mb-5">
@@ -84,36 +63,21 @@ export function TestimonialsSection() {
               </div>
             </div>
 
-            <div className="flex items-center justify-center gap-4 mt-8">
-              <button
-                onClick={() => go(-1)}
-                aria-label="Previous testimonial"
-                className="size-11 rounded-full bg-card border border-border flex items-center justify-center hover:bg-marigold hover:text-primary-foreground hover:border-marigold hover:-translate-y-0.5 transition-all duration-500"
-              >
-                <ChevronLeft className="size-5" />
-              </button>
-
-              <div className="flex gap-2">
-                {testimonials.map((_, i) => (
-                  <button
-                    key={i}
-                    onClick={() => setIdx(i)}
-                    aria-label={`Go to testimonial ${i + 1}`}
-                    className={`h-2 rounded-full transition-all duration-500 ${
-                      i === idx ? "w-8 bg-marigold" : "w-2 bg-border hover:bg-marigold/50"
-                    }`}
-                  />
-                ))}
+            {count > 1 && (
+              <div className="flex items-center justify-center gap-4 mt-8">
+                <button onClick={() => go(-1)} aria-label="Previous testimonial" className="size-11 rounded-full bg-card border border-border flex items-center justify-center hover:bg-marigold hover:text-primary-foreground hover:border-marigold hover:-translate-y-0.5 transition-all duration-500">
+                  <ChevronLeft className="size-5" />
+                </button>
+                <div className="flex gap-2">
+                  {testimonials.map((_, i) => (
+                    <button key={i} onClick={() => setIdx(i)} aria-label={`Go to testimonial ${i + 1}`} className={`h-2 rounded-full transition-all duration-500 ${i === idx ? "w-8 bg-marigold" : "w-2 bg-border hover:bg-marigold/50"}`} />
+                  ))}
+                </div>
+                <button onClick={() => go(1)} aria-label="Next testimonial" className="size-11 rounded-full bg-card border border-border flex items-center justify-center hover:bg-marigold hover:text-primary-foreground hover:border-marigold hover:-translate-y-0.5 transition-all duration-500">
+                  <ChevronRight className="size-5" />
+                </button>
               </div>
-
-              <button
-                onClick={() => go(1)}
-                aria-label="Next testimonial"
-                className="size-11 rounded-full bg-card border border-border flex items-center justify-center hover:bg-marigold hover:text-primary-foreground hover:border-marigold hover:-translate-y-0.5 transition-all duration-500"
-              >
-                <ChevronRight className="size-5" />
-              </button>
-            </div>
+            )}
           </div>
         </Reveal>
       </div>

@@ -2,7 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
-import { PHONE } from "@/lib/contact";
+import { useContacts, useContent } from "@/lib/content";
 
 const links = [
   { to: "/", label: "Home" },
@@ -14,12 +14,14 @@ const links = [
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { TEL_URL, PHONE } = useContacts();
+  const { content } = useContent();
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
         <Link to="/" className="text-2xl font-serif italic font-bold text-marigold tracking-tight">
-          Varna Utsav
+          {content.brand.name}
         </Link>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
@@ -39,8 +41,9 @@ export function Header() {
         <div className="flex items-center gap-3">
           <ThemeToggle />
           <a
-            href={`tel:+91${PHONE}`}
+            href={TEL_URL}
             className="hidden sm:inline-flex items-center gap-2 bg-foreground text-background px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest hover:bg-marigold transition-colors"
+            aria-label={`Call ${PHONE}`}
           >
             <Phone className="size-3.5" /> Call
           </a>

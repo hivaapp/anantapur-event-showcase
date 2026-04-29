@@ -3,8 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingActions } from "@/components/FloatingActions";
 import { Reveal } from "@/components/Reveal";
-import { services } from "@/lib/services";
-import { WHATSAPP_URL } from "@/lib/contact";
+import { useContacts, useContent } from "@/lib/content";
 
 export const Route = createFileRoute("/gallery")({
   head: () => ({
@@ -17,6 +16,10 @@ export const Route = createFileRoute("/gallery")({
 });
 
 function Gallery() {
+  const { content } = useContent();
+  const { WHATSAPP_URL } = useContacts();
+  const items = content.gallery;
+
   return (
     <div className="min-h-dvh bg-gradient-to-br from-background via-sky-soft/20 to-rose-soft/20 overflow-x-hidden">
       <Header />
@@ -30,20 +33,19 @@ function Gallery() {
           </div>
 
           <div className="columns-1 sm:columns-2 lg:columns-3 gap-5 [&>*]:mb-5">
-            {[...services, ...services].map((s, i) => (
-              <Reveal key={i} variant="up" delay={(i % 6) * 70}>
+            {items.map((s, i) => (
+              <Reveal key={s.id} variant="up" delay={(i % 6) * 70}>
                 <figure className="group break-inside-avoid relative rounded-3xl overflow-hidden bg-muted shadow-lg hover:shadow-2xl hover:shadow-marigold/20 hover:-translate-y-1 transition-all duration-700 shine-overlay">
                   <img
                     src={s.image}
-                    alt={s.title}
+                    alt={s.caption}
                     loading="lazy"
                     width={1024}
                     height={1024}
                     className={`w-full object-cover group-hover:scale-110 transition-transform duration-[1400ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${i % 3 === 0 ? "aspect-[3/4]" : i % 3 === 1 ? "aspect-square" : "aspect-[4/5]"}`}
                   />
                   <figcaption className="absolute inset-x-0 bottom-0 p-5 bg-gradient-to-t from-black/80 via-black/30 to-transparent text-white translate-y-2 group-hover:translate-y-0 transition-transform duration-500">
-                    <p className="text-xs uppercase tracking-widest opacity-70">{s.price} +</p>
-                    <p className="font-serif italic text-xl">{s.title}</p>
+                    <p className="font-serif italic text-xl">{s.caption}</p>
                   </figcaption>
                 </figure>
               </Reveal>

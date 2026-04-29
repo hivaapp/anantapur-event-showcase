@@ -6,32 +6,9 @@ import { FloatingActions } from "@/components/FloatingActions";
 import { Reveal } from "@/components/Reveal";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
-import { services } from "@/lib/services";
-import { WHATSAPP_URL } from "@/lib/contact";
-import heroImg from "@/assets/hero-wedding.jpg";
+import { useContacts, useContent } from "@/lib/content";
 
-const faqs = [
-  {
-    q: "Which areas do you serve?",
-    a: "We are based in Anantapur and regularly decorate events across Hindupur, Tadipatri, Dharmavaram, Kadiri, and nearby towns in the Rayalaseema region.",
-  },
-  {
-    q: "How early should I book?",
-    a: "For weddings we recommend booking 4–8 weeks in advance. For smaller functions like birthdays, haldi, or cradle ceremonies, 1–2 weeks is usually enough.",
-  },
-  {
-    q: "Do you offer customized themes?",
-    a: "Absolutely. Every event is designed around your story — traditional South Indian, pastel modern, floral minimalist, or a theme of your choice. Send us inspiration on WhatsApp and we'll curate a moodboard.",
-  },
-  {
-    q: "What does the starting price include?",
-    a: "Starting prices cover stage decor, entrance arch, and essential floral arrangements for a standard venue. Final quotes depend on venue size, flower selection, and theme complexity.",
-  },
-  {
-    q: "How do I get a quote?",
-    a: "The fastest way is WhatsApp — share your date, venue, and a reference image. We'll reply with a free customized quote within a few hours.",
-  },
-];
+const ICONS = { Heart, Sparkles, Award } as const;
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -44,13 +21,16 @@ export const Route = createFileRoute("/")({
 });
 
 function Index() {
+  const { content } = useContent();
+  const { WHATSAPP_URL } = useContacts();
+  const { hero, features, services, faqs, cta } = content;
+
   return (
     <div className="min-h-dvh bg-gradient-to-br from-background via-rose-soft/20 to-sky-soft/20 overflow-x-hidden">
       <Header />
       <main>
         {/* HERO */}
         <section className="relative overflow-hidden pt-12 pb-20 lg:pt-20 lg:pb-32 px-6 lg:px-10">
-          {/* Animated background blobs */}
           <div aria-hidden className="absolute -top-32 -left-20 size-[28rem] bg-gradient-to-tr from-marigold/30 via-rose-soft/40 to-amber-soft/40 blur-3xl animate-blob -z-10" />
           <div aria-hidden className="absolute top-1/3 -right-32 size-[32rem] bg-gradient-to-bl from-sky-soft/40 via-rose-soft/30 to-marigold/20 blur-3xl animate-blob -z-10" style={{ animationDelay: "4s" }} />
 
@@ -58,46 +38,31 @@ function Index() {
             <div className="flex-1 space-y-7 z-10">
               <Reveal variant="fade">
                 <div className="inline-flex items-center gap-2 px-4 py-1.5 bg-marigold/10 border border-marigold/20 rounded-full text-marigold text-xs font-bold uppercase tracking-widest animate-pulse-slow">
-                  <Sparkles className="size-3.5 animate-shimmer" /> Premier Decor in Anantapur
+                  <Sparkles className="size-3.5 animate-shimmer" /> {hero.badge}
                 </div>
               </Reveal>
               <Reveal variant="up" delay={120}>
                 <h1 className="text-5xl sm:text-6xl lg:text-7xl font-serif italic leading-[1.05] text-balance">
-                  Crafting <span className="text-shine">Sunlit</span> Celebrations.
+                  {hero.headingPre}<span className="text-shine">{hero.headingHighlight}</span>{hero.headingPost}
                 </h1>
               </Reveal>
               <Reveal variant="up" delay={220}>
-                <p className="max-w-[50ch] text-lg text-muted-foreground leading-relaxed">
-                  We transform your most cherished milestones into ethereal landscapes of marigold,
-                  silk, and iridescent light — for weddings, functions and every joyful occasion.
-                </p>
+                <p className="max-w-[50ch] text-lg text-muted-foreground leading-relaxed">{hero.subheading}</p>
               </Reveal>
               <Reveal variant="up" delay={320}>
                 <div className="flex flex-wrap gap-4 pt-2">
-                  <a
-                    href={WHATSAPP_URL}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group/cta relative inline-flex items-center gap-2 px-7 py-4 bg-marigold text-primary-foreground rounded-full font-semibold shadow-xl shadow-marigold/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-marigold/50 transition-all duration-500 shine-overlay"
-                  >
-                    Get a Free Quote <ArrowRight className="size-4 group-hover/cta:translate-x-1 transition-transform" />
+                  <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="group/cta relative inline-flex items-center gap-2 px-7 py-4 bg-marigold text-primary-foreground rounded-full font-semibold shadow-xl shadow-marigold/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-marigold/50 transition-all duration-500 shine-overlay">
+                    {hero.ctaPrimary} <ArrowRight className="size-4 group-hover/cta:translate-x-1 transition-transform" />
                   </a>
-                  <Link
-                    to="/gallery"
-                    className="inline-flex items-center gap-2 px-7 py-4 border border-border bg-background/60 backdrop-blur rounded-full font-semibold hover:bg-accent hover:-translate-y-1 transition-all duration-500"
-                  >
-                    View Gallery
+                  <Link to="/gallery" className="inline-flex items-center gap-2 px-7 py-4 border border-border bg-background/60 backdrop-blur rounded-full font-semibold hover:bg-accent hover:-translate-y-1 transition-all duration-500">
+                    {hero.ctaSecondary}
                   </Link>
                 </div>
               </Reveal>
               <Reveal variant="up" delay={420}>
                 <div className="flex flex-wrap gap-8 pt-6 text-sm">
-                  {[
-                    { n: "500+", l: "Events" },
-                    { n: "8+", l: "Years" },
-                    { n: "100%", l: "Custom" },
-                  ].map((s) => (
-                    <div key={s.l} className="group/stat">
+                  {hero.stats.map((s) => (
+                    <div key={s.id} className="group/stat">
                       <span className="block text-2xl font-serif text-marigold transition-transform duration-500 group-hover/stat:scale-110">{s.n}</span>
                       <span className="text-muted-foreground">{s.l}</span>
                     </div>
@@ -109,7 +74,7 @@ function Index() {
             <Reveal variant="scale" delay={200} className="flex-1 w-full max-w-lg lg:max-w-none">
               <div className="relative animate-tilt">
                 <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden shadow-2xl rotate-2 hover:rotate-0 hover:scale-[1.02] transition-all duration-700">
-                  <img src={heroImg} alt="Luxury wedding decoration" className="w-full h-full object-cover" width={1280} height={1600} />
+                  <img src={hero.image} alt="Luxury event decoration" className="w-full h-full object-cover" width={1280} height={1600} />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/30 to-transparent" />
                 </div>
                 <div className="absolute -top-10 -left-10 size-48 rounded-full bg-gradient-to-tr from-rose-soft/60 via-sky-soft/60 to-amber-soft/60 blur-3xl animate-float -z-10" />
@@ -122,21 +87,20 @@ function Index() {
         {/* WHY US */}
         <section className="py-20 px-6 lg:px-10">
           <div className="max-w-7xl mx-auto grid md:grid-cols-3 gap-8">
-            {[
-              { icon: Heart, title: "Crafted with Devotion", text: "Every garland, every drape — handpicked and arranged with love by our local artisans." },
-              { icon: Sparkles, title: "Bespoke Themes", text: "From traditional South Indian to modern pastel — we design around your story." },
-              { icon: Award, title: "Trusted in Anantapur", text: "Hundreds of families have entrusted us with their most precious moments." },
-            ].map((f, i) => (
-              <Reveal key={f.title} variant="up" delay={i * 120}>
-                <div className="group p-8 rounded-3xl bg-card border border-border card-hover shine-overlay">
-                  <div className="size-14 rounded-2xl bg-marigold/10 flex items-center justify-center mb-5 group-hover:bg-marigold group-hover:rotate-6 transition-all duration-500">
-                    <f.icon className="size-7 text-marigold group-hover:text-primary-foreground transition-colors" />
+            {features.map((f, i) => {
+              const Icon = ICONS[f.icon] ?? Sparkles;
+              return (
+                <Reveal key={f.id} variant="up" delay={i * 120}>
+                  <div className="group p-8 rounded-3xl bg-card border border-border card-hover shine-overlay">
+                    <div className="size-14 rounded-2xl bg-marigold/10 flex items-center justify-center mb-5 group-hover:bg-marigold group-hover:rotate-6 transition-all duration-500">
+                      <Icon className="size-7 text-marigold group-hover:text-primary-foreground transition-colors" />
+                    </div>
+                    <h3 className="text-xl font-serif mb-2">{f.title}</h3>
+                    <p className="text-sm text-muted-foreground leading-relaxed">{f.text}</p>
                   </div>
-                  <h3 className="text-xl font-serif mb-2">{f.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{f.text}</p>
-                </div>
-              </Reveal>
-            ))}
+                </Reveal>
+              );
+            })}
           </div>
         </section>
 
@@ -157,7 +121,7 @@ function Index() {
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
               {services.slice(0, 6).map((s, i) => (
-                <Reveal key={s.title} variant="up" delay={i * 90}>
+                <Reveal key={s.id} variant="up" delay={i * 90}>
                   <div className="group p-6 bg-card/60 backdrop-blur border border-border rounded-3xl card-hover h-full">
                     <div className="aspect-square rounded-2xl overflow-hidden mb-5 bg-muted shine-overlay">
                       <img src={s.image} alt={s.title} loading="lazy" width={1024} height={1024} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]" />
@@ -175,7 +139,6 @@ function Index() {
           </div>
         </section>
 
-        {/* TESTIMONIALS */}
         <TestimonialsSection />
 
         {/* FAQ */}
@@ -190,11 +153,7 @@ function Index() {
             <Reveal variant="up" delay={120}>
               <Accordion type="single" collapsible className="w-full space-y-3">
                 {faqs.map((f, i) => (
-                  <AccordionItem
-                    key={f.q}
-                    value={`item-${i}`}
-                    className="border border-border rounded-2xl bg-card/60 backdrop-blur px-5 data-[state=open]:shadow-xl data-[state=open]:shadow-marigold/10 data-[state=open]:border-marigold/40 transition-all duration-500"
-                  >
+                  <AccordionItem key={f.id} value={`item-${i}`} className="border border-border rounded-2xl bg-card/60 backdrop-blur px-5 data-[state=open]:shadow-xl data-[state=open]:shadow-marigold/10 data-[state=open]:border-marigold/40 transition-all duration-500">
                     <AccordionTrigger className="text-left font-serif text-lg hover:no-underline py-5 hover:text-marigold transition-colors">
                       {f.q}
                     </AccordionTrigger>
@@ -223,10 +182,8 @@ function Index() {
                 <div className="absolute bottom-0 right-1/4 size-52 bg-white/10 rounded-full blur-3xl animate-float-slow" />
               </div>
               <div className="relative">
-                <h2 className="text-4xl lg:text-5xl font-serif italic mb-4">Ready to celebrate?</h2>
-                <p className="max-w-xl mx-auto mb-8 opacity-90">
-                  Tell us about your event — we'll send you a free customized quote on WhatsApp within hours.
-                </p>
+                <h2 className="text-4xl lg:text-5xl font-serif italic mb-4">{cta.heading}</h2>
+                <p className="max-w-xl mx-auto mb-8 opacity-90">{cta.subheading}</p>
                 <div className="flex flex-wrap gap-4 justify-center">
                   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-white text-marigold rounded-full font-semibold hover:scale-105 hover:shadow-2xl transition-all duration-500 shine-overlay">Chat on WhatsApp</a>
                   <Link to="/contact" className="px-8 py-4 border border-white/40 backdrop-blur rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-500">Visit Studio</Link>
