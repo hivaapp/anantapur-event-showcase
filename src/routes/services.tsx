@@ -3,9 +3,8 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { FloatingActions } from "@/components/FloatingActions";
 import { Reveal } from "@/components/Reveal";
-import { services } from "@/lib/services";
-import { WHATSAPP_URL } from "@/lib/contact";
 import { Check } from "lucide-react";
+import { useContacts, useContent } from "@/lib/content";
 
 export const Route = createFileRoute("/services")({
   head: () => ({
@@ -20,6 +19,10 @@ export const Route = createFileRoute("/services")({
 const includes = ["Site visit & consultation", "Custom theme design", "Setup & dismantling", "Dedicated coordinator"];
 
 function Services() {
+  const { content } = useContent();
+  const { WHATSAPP_URL } = useContacts();
+  const services = content.services;
+
   return (
     <div className="min-h-dvh bg-gradient-to-br from-background via-amber-soft/20 to-rose-soft/20 overflow-x-hidden">
       <Header />
@@ -34,7 +37,7 @@ function Services() {
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
             {services.map((s, i) => (
-              <Reveal key={s.title} variant="up" delay={i * 80}>
+              <Reveal key={s.id} variant="up" delay={i * 80}>
                 <article className="group flex flex-col bg-card border border-border rounded-3xl overflow-hidden card-hover h-full">
                   <div className="aspect-[4/3] overflow-hidden bg-muted shine-overlay">
                     <img src={s.image} alt={s.title} loading="lazy" width={1024} height={1024} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-[1200ms] ease-[cubic-bezier(0.22,1,0.36,1)]" />

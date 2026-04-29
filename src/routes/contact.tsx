@@ -4,19 +4,20 @@ import { Footer } from "@/components/Footer";
 import { FloatingActions } from "@/components/FloatingActions";
 import { Reveal } from "@/components/Reveal";
 import { Phone, MessageCircle, MapPin, Mail, Clock } from "lucide-react";
-import { PHONE, TEL_URL, WHATSAPP_URL, MAPS_EMBED, MAPS_LINK, LOCATION } from "@/lib/contact";
+import { useContacts } from "@/lib/content";
 
 export const Route = createFileRoute("/contact")({
   head: () => ({
     meta: [
       { title: "Contact — Varna Utsav Anantapur | Call or WhatsApp" },
-      { name: "description", content: "Reach Varna Utsav in Anantapur. Call +91 6302024335, WhatsApp us, or visit our studio. Free consultation for all events." },
+      { name: "description", content: "Reach Varna Utsav in Anantapur. Call, WhatsApp, or visit our studio. Free consultation for all events." },
     ],
   }),
   component: Contact,
 });
 
 function Contact() {
+  const c = useContacts();
   return (
     <div className="min-h-dvh bg-gradient-to-br from-background via-rose-soft/20 to-amber-soft/20 overflow-x-hidden">
       <Header />
@@ -31,34 +32,34 @@ function Contact() {
 
           <div className="grid lg:grid-cols-2 gap-6 mb-12">
             <Reveal variant="left">
-              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="group block p-8 rounded-3xl bg-emerald-500 text-white shadow-xl shadow-emerald-500/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-500/50 transition-all duration-500 shine-overlay h-full">
+              <a href={c.WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="group block p-8 rounded-3xl bg-emerald-500 text-white shadow-xl shadow-emerald-500/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-emerald-500/50 transition-all duration-500 shine-overlay h-full">
                 <MessageCircle className="size-10 mb-4 group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500" />
                 <h2 className="text-2xl font-serif italic mb-2">WhatsApp Chat</h2>
                 <p className="opacity-90 mb-4">Fastest way to reach us — share your event details and get a quote.</p>
-                <span className="inline-flex items-center gap-2 font-semibold">+91 {PHONE} <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                <span className="inline-flex items-center gap-2 font-semibold">+91 {c.PHONE} <span className="group-hover:translate-x-1 transition-transform">→</span></span>
               </a>
             </Reveal>
             <Reveal variant="right">
-              <a href={TEL_URL} className="group block p-8 rounded-3xl bg-foreground text-background shadow-xl hover:-translate-y-1 hover:shadow-2xl transition-all duration-500 shine-overlay h-full">
+              <a href={c.TEL_URL} className="group block p-8 rounded-3xl bg-foreground text-background shadow-xl hover:-translate-y-1 hover:shadow-2xl transition-all duration-500 shine-overlay h-full">
                 <Phone className="size-10 mb-4 text-marigold group-hover:scale-110 group-hover:rotate-6 transition-transform duration-500" />
                 <h2 className="text-2xl font-serif italic mb-2">Call Us</h2>
                 <p className="opacity-80 mb-4">Prefer to talk? We're a phone call away during business hours.</p>
-                <span className="inline-flex items-center gap-2 font-semibold text-marigold">+91 {PHONE} <span className="group-hover:translate-x-1 transition-transform">→</span></span>
+                <span className="inline-flex items-center gap-2 font-semibold text-marigold">+91 {c.PHONE} <span className="group-hover:translate-x-1 transition-transform">→</span></span>
               </a>
             </Reveal>
           </div>
 
           <div className="grid md:grid-cols-3 gap-6 mb-12">
             {[
-              { Icon: MapPin, label: "Studio", value: LOCATION },
-              { Icon: Clock, label: "Hours", value: "Mon – Sun · 9 AM – 9 PM" },
-              { Icon: Mail, label: "Email", value: "hello@varnautsav.in" },
-            ].map((c, i) => (
-              <Reveal key={c.label} variant="up" delay={i * 100}>
+              { Icon: MapPin, label: "Studio", value: c.address },
+              { Icon: Clock, label: "Hours", value: c.hours },
+              { Icon: Mail, label: "Email", value: c.email },
+            ].map((item, i) => (
+              <Reveal key={item.label} variant="up" delay={i * 100}>
                 <div className="p-6 rounded-2xl bg-card border border-border card-hover h-full">
-                  <c.Icon className="size-6 text-marigold mb-3" />
-                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-1">{c.label}</p>
-                  <p className="font-medium">{c.value}</p>
+                  <item.Icon className="size-6 text-marigold mb-3" />
+                  <p className="text-xs uppercase tracking-widest text-muted-foreground mb-1">{item.label}</p>
+                  <p className="font-medium">{item.value}</p>
                 </div>
               </Reveal>
             ))}
@@ -68,19 +69,19 @@ function Contact() {
             <div className="rounded-[2rem] overflow-hidden border border-border shadow-2xl">
               <div className="aspect-[16/9] bg-muted">
                 <iframe
-                  src={MAPS_EMBED}
+                  src={c.mapsEmbed}
                   className="w-full h-full"
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
-                  title="Varna Utsav location in Anantapur"
+                  title="Studio location"
                 />
               </div>
               <div className="flex flex-wrap items-center justify-between gap-4 p-6 bg-card">
                 <div>
                   <p className="font-serif italic text-xl">Visit our studio</p>
-                  <p className="text-sm text-muted-foreground">{LOCATION}</p>
+                  <p className="text-sm text-muted-foreground">{c.address}</p>
                 </div>
-                <a href={MAPS_LINK} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-marigold text-primary-foreground rounded-full text-sm font-semibold hover:scale-105 hover:shadow-xl transition-all duration-500 shine-overlay">
+                <a href={c.mapsLink} target="_blank" rel="noopener noreferrer" className="px-6 py-3 bg-marigold text-primary-foreground rounded-full text-sm font-semibold hover:scale-105 hover:shadow-xl transition-all duration-500 shine-overlay">
                   Open in Google Maps
                 </a>
               </div>
