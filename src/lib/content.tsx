@@ -191,26 +191,44 @@ function mergeWithDefaults(stored: any): SiteContent {
   };
 }
 
-export function ContentProvider({ children }: { children: ReactNode }) {
-  const [content, setContentState] = useState<SiteContent>(DEFAULT_CONTENT);
+export function ContentProvider({
+  children,
+  override,
+  readOnly,
+}: {
+  children: ReactNode;
+  override?: SiteContent | null;
+  readOnly?: boolean;
+}) {
+  const [content, setContentState] = useState<SiteContent>(override ?? DEFAULT_CONTENT);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
+    if (override) {
+      setContentState(override);
+      setHydrated(true);
+      return;
+    }
     try {
       const raw = localStorage.getItem(STORAGE_KEY);
       if (raw) setContentState(mergeWithDefaults(JSON.parse(raw)));
     } catch {}
     setHydrated(true);
-  }, []);
+  }, [override]);
 
   const setContent = (c: SiteContent) => {
     setContentState(c);
+    if (readOnly || override) return;
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(c));
     } catch {}
   };
 
   const reset = () => {
+    if (readOnly || override) {
+      setContentState(override ?? DEFAULT_CONTENT);
+      return;
+    }
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch {}
@@ -223,6 +241,8 @@ export function ContentProvider({ children }: { children: ReactNode }) {
     </ContentCtx.Provider>
   );
 }
+
+export { mergeWithDefaults };
 
 export function useContent() {
   const ctx = useContext(ContentCtx);
