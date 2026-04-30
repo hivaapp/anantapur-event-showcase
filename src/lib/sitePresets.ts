@@ -369,15 +369,13 @@ export function uniqueSlug(name: string): string {
 }
 
 // Apply theme tokens to :root style scope
-export function themeStyleVars(type: SiteType): React.CSSProperties {
+export function themeStyleVars(type: SiteType): Record<string, string> {
   const t = TYPES[type].theme;
   return {
-    // override semantic tokens — only the marigold accent and soft colors
-    ["--marigold" as any]: t.primary,
-    ["--rose-soft" as any]: t.rose,
-    ["--sky-soft" as any]: t.sky,
-    ["--amber-soft" as any]: t.amber,
+    "--marigold": t.primary,
+    "--rose-soft": t.rose,
+    "--sky-soft": t.sky,
+    "--amber-soft": t.amber,
   };
 }
 
-import * as React from "react";
