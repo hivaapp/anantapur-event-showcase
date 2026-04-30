@@ -47,6 +47,12 @@ export function Header() {
           >
             <Phone className="size-3.5" /> Call
           </a>
+          <Link
+            to="/create"
+            className="hidden sm:inline-flex items-center gap-1 px-4 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest border border-marigold/40 text-marigold hover:bg-marigold hover:text-primary-foreground transition-colors"
+          >
+            ✨ Create
+          </Link>
           <button
             className="md:hidden size-10 rounded-full border border-border flex items-center justify-center"
             onClick={() => setOpen(!open)}
