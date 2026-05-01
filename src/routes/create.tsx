@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { TYPES, type SiteType, buildSiteContent, saveSite, uniqueSlug, loadSites } from "@/lib/sitePresets";
-import type { SiteContent, ServiceItem, Faq } from "@/lib/content";
+import type { SiteContent, ServiceItem, Faq, GalleryItem } from "@/lib/content";
 import { uid } from "@/lib/content";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { ImageUpload } from "@/components/ImageUpload";
 
 export const Route = createFileRoute("/create")({
   head: () => ({
@@ -291,6 +292,16 @@ function EditStep({
     patch("faqs", draft.faqs.filter((f) => f.id !== id));
   }
 
+  function updateGallery(id: string, partial: Partial<GalleryItem>) {
+    patch("gallery", draft.gallery.map((g) => (g.id === id ? { ...g, ...partial } : g)));
+  }
+  function addGallery() {
+    patch("gallery", [...draft.gallery, { id: uid(), image: draft.hero.image, caption: "New image" }]);
+  }
+  function removeGallery(id: string) {
+    patch("gallery", draft.gallery.filter((g) => g.id !== id));
+  }
+
   return (
     <div className="space-y-8">
       <div className="bg-card border border-border rounded-3xl p-6 lg:p-8 shadow-xl">
@@ -319,19 +330,29 @@ function EditStep({
 
         <SectionTitle>Hero</SectionTitle>
         <div className="space-y-4 mb-8">
-          <Field label="Badge" name="heroBadge">
-            <Input value={draft.hero.badge} onChange={(e) => patchHero({ badge: e.target.value })} maxLength={60} />
-          </Field>
-          <div className="grid sm:grid-cols-3 gap-4">
-            <Field label="Heading — before" name="heroPre">
-              <Input value={draft.hero.headingPre} onChange={(e) => patchHero({ headingPre: e.target.value })} maxLength={40} />
-            </Field>
-            <Field label="Heading — highlight" name="heroHl">
-              <Input value={draft.hero.headingHighlight} onChange={(e) => patchHero({ headingHighlight: e.target.value })} maxLength={40} />
-            </Field>
-            <Field label="Heading — after" name="heroPost">
-              <Input value={draft.hero.headingPost} onChange={(e) => patchHero({ headingPost: e.target.value })} maxLength={40} />
-            </Field>
+          <div className="grid md:grid-cols-[1fr_280px] gap-4 items-start">
+            <div className="space-y-4">
+              <Field label="Badge" name="heroBadge">
+                <Input value={draft.hero.badge} onChange={(e) => patchHero({ badge: e.target.value })} maxLength={60} />
+              </Field>
+              <div className="grid sm:grid-cols-3 gap-4">
+                <Field label="Heading — before" name="heroPre">
+                  <Input value={draft.hero.headingPre} onChange={(e) => patchHero({ headingPre: e.target.value })} maxLength={40} />
+                </Field>
+                <Field label="Heading — highlight" name="heroHl">
+                  <Input value={draft.hero.headingHighlight} onChange={(e) => patchHero({ headingHighlight: e.target.value })} maxLength={40} />
+                </Field>
+                <Field label="Heading — after" name="heroPost">
+                  <Input value={draft.hero.headingPost} onChange={(e) => patchHero({ headingPost: e.target.value })} maxLength={40} />
+                </Field>
+              </div>
+            </div>
+            <ImageUpload
+              label="Hero banner image"
+              value={draft.hero.image}
+              onChange={(url) => patchHero({ image: url })}
+              aspect="aspect-[4/5]"
+            />
           </div>
           <Field label="Subheading" name="heroSub">
             <Textarea value={draft.hero.subheading} onChange={(e) => patchHero({ subheading: e.target.value })} rows={3} maxLength={300} />
@@ -361,20 +382,59 @@ function EditStep({
                   <Trash2 className="size-3.5" /> Remove
                 </button>
               </div>
-              <div className="grid sm:grid-cols-2 gap-3">
-                <Field label="Title" name={`s-title-${s.id}`}>
-                  <Input value={s.title} onChange={(e) => updateService(s.id, { title: e.target.value })} maxLength={60} />
-                </Field>
-                <Field label="Starting price" name={`s-price-${s.id}`}>
-                  <Input value={s.price} onChange={(e) => updateService(s.id, { price: e.target.value })} maxLength={30} />
-                </Field>
+              <div className="grid md:grid-cols-[200px_1fr] gap-4">
+                <ImageUpload
+                  label="Service image"
+                  value={s.image}
+                  onChange={(url) => updateService(s.id, { image: url })}
+                  aspect="aspect-square"
+                />
+                <div className="space-y-3">
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <Field label="Title" name={`s-title-${s.id}`}>
+                      <Input value={s.title} onChange={(e) => updateService(s.id, { title: e.target.value })} maxLength={60} />
+                    </Field>
+                    <Field label="Starting price" name={`s-price-${s.id}`}>
+                      <Input value={s.price} onChange={(e) => updateService(s.id, { price: e.target.value })} maxLength={30} />
+                    </Field>
+                  </div>
+                  <Field label="Description" name={`s-desc-${s.id}`}>
+                    <Textarea value={s.description} onChange={(e) => updateService(s.id, { description: e.target.value })} rows={2} maxLength={240} />
+                  </Field>
+                </div>
               </div>
-              <Field label="Description" name={`s-desc-${s.id}`}>
-                <Textarea value={s.description} onChange={(e) => updateService(s.id, { description: e.target.value })} rows={2} maxLength={240} />
-              </Field>
             </div>
           ))}
           {draft.services.length === 0 && <p className="text-sm text-muted-foreground">No services yet. Add one above.</p>}
+        </div>
+
+        <SectionTitle>
+          Gallery
+          <Button type="button" size="sm" variant="outline" onClick={addGallery} className="ml-auto rounded-full">
+            <Plus className="size-3.5 mr-1" /> Add
+          </Button>
+        </SectionTitle>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {draft.gallery.map((g, i) => (
+            <div key={g.id} className="p-3 rounded-2xl border border-border bg-background/40 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">#{i + 1}</span>
+                <button type="button" onClick={() => removeGallery(g.id)} className="text-xs text-destructive hover:underline inline-flex items-center gap-1">
+                  <Trash2 className="size-3.5" />
+                </button>
+              </div>
+              <ImageUpload
+                label="Gallery image"
+                value={g.image}
+                onChange={(url) => updateGallery(g.id, { image: url })}
+                aspect="aspect-square"
+              />
+              <Field label="Caption" name={`g-c-${g.id}`}>
+                <Input value={g.caption} onChange={(e) => updateGallery(g.id, { caption: e.target.value })} maxLength={80} />
+              </Field>
+            </div>
+          ))}
+          {draft.gallery.length === 0 && <p className="text-sm text-muted-foreground col-span-full">No gallery images yet. Add one above.</p>}
         </div>
 
         <SectionTitle>
