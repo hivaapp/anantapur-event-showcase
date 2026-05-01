@@ -7,10 +7,11 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { TYPES, type SiteType, buildSiteContent, saveSite, uniqueSlug, loadSites } from "@/lib/sitePresets";
-import type { SiteContent, ServiceItem, Faq } from "@/lib/content";
+import type { SiteContent, ServiceItem, Faq, GalleryItem } from "@/lib/content";
 import { uid } from "@/lib/content";
 import { toast } from "sonner";
 import { Toaster } from "@/components/ui/sonner";
+import { ImageUpload } from "@/components/ImageUpload";
 
 export const Route = createFileRoute("/create")({
   head: () => ({
