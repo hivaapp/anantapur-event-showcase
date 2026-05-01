@@ -372,20 +372,59 @@ function EditStep({
                   <Trash2 className="size-3.5" /> Remove
                 </button>
               </div>
-              <div className="grid sm:grid-cols-2 gap-3">
-                <Field label="Title" name={`s-title-${s.id}`}>
-                  <Input value={s.title} onChange={(e) => updateService(s.id, { title: e.target.value })} maxLength={60} />
-                </Field>
-                <Field label="Starting price" name={`s-price-${s.id}`}>
-                  <Input value={s.price} onChange={(e) => updateService(s.id, { price: e.target.value })} maxLength={30} />
-                </Field>
+              <div className="grid md:grid-cols-[200px_1fr] gap-4">
+                <ImageUpload
+                  label="Service image"
+                  value={s.image}
+                  onChange={(url) => updateService(s.id, { image: url })}
+                  aspect="aspect-square"
+                />
+                <div className="space-y-3">
+                  <div className="grid sm:grid-cols-2 gap-3">
+                    <Field label="Title" name={`s-title-${s.id}`}>
+                      <Input value={s.title} onChange={(e) => updateService(s.id, { title: e.target.value })} maxLength={60} />
+                    </Field>
+                    <Field label="Starting price" name={`s-price-${s.id}`}>
+                      <Input value={s.price} onChange={(e) => updateService(s.id, { price: e.target.value })} maxLength={30} />
+                    </Field>
+                  </div>
+                  <Field label="Description" name={`s-desc-${s.id}`}>
+                    <Textarea value={s.description} onChange={(e) => updateService(s.id, { description: e.target.value })} rows={2} maxLength={240} />
+                  </Field>
+                </div>
               </div>
-              <Field label="Description" name={`s-desc-${s.id}`}>
-                <Textarea value={s.description} onChange={(e) => updateService(s.id, { description: e.target.value })} rows={2} maxLength={240} />
-              </Field>
             </div>
           ))}
           {draft.services.length === 0 && <p className="text-sm text-muted-foreground">No services yet. Add one above.</p>}
+        </div>
+
+        <SectionTitle>
+          Gallery
+          <Button type="button" size="sm" variant="outline" onClick={addGallery} className="ml-auto rounded-full">
+            <Plus className="size-3.5 mr-1" /> Add
+          </Button>
+        </SectionTitle>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+          {draft.gallery.map((g, i) => (
+            <div key={g.id} className="p-3 rounded-2xl border border-border bg-background/40 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-bold text-muted-foreground uppercase tracking-widest">#{i + 1}</span>
+                <button type="button" onClick={() => removeGallery(g.id)} className="text-xs text-destructive hover:underline inline-flex items-center gap-1">
+                  <Trash2 className="size-3.5" />
+                </button>
+              </div>
+              <ImageUpload
+                label="Gallery image"
+                value={g.image}
+                onChange={(url) => updateGallery(g.id, { image: url })}
+                aspect="aspect-square"
+              />
+              <Field label="Caption" name={`g-c-${g.id}`}>
+                <Input value={g.caption} onChange={(e) => updateGallery(g.id, { caption: e.target.value })} maxLength={80} />
+              </Field>
+            </div>
+          ))}
+          {draft.gallery.length === 0 && <p className="text-sm text-muted-foreground col-span-full">No gallery images yet. Add one above.</p>}
         </div>
 
         <SectionTitle>
