@@ -292,6 +292,16 @@ function EditStep({
     patch("faqs", draft.faqs.filter((f) => f.id !== id));
   }
 
+  function updateGallery(id: string, partial: Partial<GalleryItem>) {
+    patch("gallery", draft.gallery.map((g) => (g.id === id ? { ...g, ...partial } : g)));
+  }
+  function addGallery() {
+    patch("gallery", [...draft.gallery, { id: uid(), image: draft.hero.image, caption: "New image" }]);
+  }
+  function removeGallery(id: string) {
+    patch("gallery", draft.gallery.filter((g) => g.id !== id));
+  }
+
   return (
     <div className="space-y-8">
       <div className="bg-card border border-border rounded-3xl p-6 lg:p-8 shadow-xl">
