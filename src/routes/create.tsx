@@ -52,7 +52,9 @@ function CreatePage() {
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [draft, setDraft] = useState<SiteContent | null>(null);
 
-  const sites = typeof window !== "undefined" ? Object.values(loadSites()) : [];
+  const [sites, setSites] = useState<StoredSite[]>([]);
+  const refreshSites = () => setSites(Object.values(loadSites()).sort((a, b) => b.createdAt - a.createdAt));
+  useEffect(() => { refreshSites(); }, []);
 
   function pickType(t: SiteType) {
     setType(t);
