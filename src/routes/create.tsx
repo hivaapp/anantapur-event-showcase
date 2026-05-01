@@ -1,12 +1,12 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { z } from "zod";
-import { ArrowLeft, ArrowRight, Sparkles, Wand2, Plus, Trash2 } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Wand2, Plus, Trash2, Power, Settings, ExternalLink } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { TYPES, type SiteType, buildSiteContent, saveSite, uniqueSlug, loadSites } from "@/lib/sitePresets";
+import { TYPES, type SiteType, buildSiteContent, saveSite, uniqueSlug, loadSites, deleteSite, setSiteEnabled, type StoredSite } from "@/lib/sitePresets";
 import type { SiteContent, ServiceItem, Faq, GalleryItem } from "@/lib/content";
 import { uid } from "@/lib/content";
 import { toast } from "sonner";
