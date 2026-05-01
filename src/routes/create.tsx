@@ -320,19 +320,29 @@ function EditStep({
 
         <SectionTitle>Hero</SectionTitle>
         <div className="space-y-4 mb-8">
-          <Field label="Badge" name="heroBadge">
-            <Input value={draft.hero.badge} onChange={(e) => patchHero({ badge: e.target.value })} maxLength={60} />
-          </Field>
-          <div className="grid sm:grid-cols-3 gap-4">
-            <Field label="Heading — before" name="heroPre">
-              <Input value={draft.hero.headingPre} onChange={(e) => patchHero({ headingPre: e.target.value })} maxLength={40} />
-            </Field>
-            <Field label="Heading — highlight" name="heroHl">
-              <Input value={draft.hero.headingHighlight} onChange={(e) => patchHero({ headingHighlight: e.target.value })} maxLength={40} />
-            </Field>
-            <Field label="Heading — after" name="heroPost">
-              <Input value={draft.hero.headingPost} onChange={(e) => patchHero({ headingPost: e.target.value })} maxLength={40} />
-            </Field>
+          <div className="grid md:grid-cols-[1fr_280px] gap-4 items-start">
+            <div className="space-y-4">
+              <Field label="Badge" name="heroBadge">
+                <Input value={draft.hero.badge} onChange={(e) => patchHero({ badge: e.target.value })} maxLength={60} />
+              </Field>
+              <div className="grid sm:grid-cols-3 gap-4">
+                <Field label="Heading — before" name="heroPre">
+                  <Input value={draft.hero.headingPre} onChange={(e) => patchHero({ headingPre: e.target.value })} maxLength={40} />
+                </Field>
+                <Field label="Heading — highlight" name="heroHl">
+                  <Input value={draft.hero.headingHighlight} onChange={(e) => patchHero({ headingHighlight: e.target.value })} maxLength={40} />
+                </Field>
+                <Field label="Heading — after" name="heroPost">
+                  <Input value={draft.hero.headingPost} onChange={(e) => patchHero({ headingPost: e.target.value })} maxLength={40} />
+                </Field>
+              </div>
+            </div>
+            <ImageUpload
+              label="Hero banner image"
+              value={draft.hero.image}
+              onChange={(url) => patchHero({ image: url })}
+              aspect="aspect-[4/5]"
+            />
           </div>
           <Field label="Subheading" name="heroSub">
             <Textarea value={draft.hero.subheading} onChange={(e) => patchHero({ subheading: e.target.value })} rows={3} maxLength={300} />
