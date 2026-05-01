@@ -225,21 +225,63 @@ function CreatePage() {
           <div className="mt-16">
             <h2 className="text-xs uppercase tracking-widest text-muted-foreground font-bold mb-4">Your generated sites</h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
-              {sites.map((s) => (
-                <Link
-                  key={s.slug}
-                  to="/site/$slug"
-                  params={{ slug: s.slug }}
-                  className="block p-5 rounded-2xl bg-card border border-border hover:border-marigold/60 hover:-translate-y-0.5 transition-all"
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-2xl">{TYPES[s.type].emoji}</span>
-                    <span className="text-xs text-muted-foreground">{new Date(s.createdAt).toLocaleDateString()}</span>
+              {sites.map((s) => {
+                const enabled = s.enabled ?? true;
+                return (
+                  <div
+                    key={s.slug}
+                    className="p-5 rounded-2xl bg-card border border-border hover:border-marigold/60 transition-all flex flex-col"
+                  >
+                    <div className="flex items-center justify-between mb-1">
+                      <span className="text-2xl">{TYPES[s.type].emoji}</span>
+                      <span className={`text-[10px] font-bold uppercase tracking-widest px-2 py-0.5 rounded-full ${enabled ? "bg-marigold/15 text-marigold" : "bg-destructive/15 text-destructive"}`}>
+                        {enabled ? "Live" : "Disabled"}
+                      </span>
+                    </div>
+                    <p className="font-serif italic text-lg">{s.content.brand.name}</p>
+                    <p className="text-xs text-muted-foreground truncate mb-3">/site/{s.slug}</p>
+                    <p className="text-[11px] text-muted-foreground mb-4">{new Date(s.createdAt).toLocaleDateString()}</p>
+
+                    <div className="mt-auto flex flex-wrap gap-2">
+                      <Button asChild size="sm" variant="outline" className="rounded-full text-xs">
+                        <Link to="/site/$slug" params={{ slug: s.slug }}>
+                          <ExternalLink className="size-3.5" /> View
+                        </Link>
+                      </Button>
+                      <Button asChild size="sm" variant="outline" className="rounded-full text-xs">
+                        <Link to="/site/$slug/admin" params={{ slug: s.slug }}>
+                          <Settings className="size-3.5" /> Edit
+                        </Link>
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full text-xs"
+                        onClick={() => {
+                          setSiteEnabled(s.slug, !enabled);
+                          refreshSites();
+                          toast.success(enabled ? "Disabled" : "Enabled");
+                        }}
+                      >
+                        <Power className="size-3.5" /> {enabled ? "Disable" : "Enable"}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full text-xs text-destructive hover:text-destructive"
+                        onClick={() => {
+                          if (!confirm(`Delete /site/${s.slug}? This cannot be undone.`)) return;
+                          deleteSite(s.slug);
+                          refreshSites();
+                          toast.success("Website deleted.");
+                        }}
+                      >
+                        <Trash2 className="size-3.5" /> Delete
+                      </Button>
+                    </div>
                   </div>
-                  <p className="font-serif italic text-lg">{s.content.brand.name}</p>
-                  <p className="text-xs text-muted-foreground truncate">/site/{s.slug}</p>
-                </Link>
-              ))}
+                );
+              })}
             </div>
           </div>
         )}
