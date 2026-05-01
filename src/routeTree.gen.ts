@@ -17,6 +17,7 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SiteSlugRouteImport } from './routes/site.$slug'
+import { Route as SiteSlugAdminRouteImport } from './routes/site.$slug.admin'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -58,6 +59,11 @@ const SiteSlugRoute = SiteSlugRouteImport.update({
   path: '/site/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SiteSlugAdminRoute = SiteSlugAdminRouteImport.update({
+  id: '/admin',
+  path: '/admin',
+  getParentRoute: () => SiteSlugRoute,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -67,7 +73,8 @@ export interface FileRoutesByFullPath {
   '/create': typeof CreateRoute
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
-  '/site/$slug': typeof SiteSlugRoute
+  '/site/$slug': typeof SiteSlugRouteWithChildren
+  '/site/$slug/admin': typeof SiteSlugAdminRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -77,7 +84,8 @@ export interface FileRoutesByTo {
   '/create': typeof CreateRoute
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
-  '/site/$slug': typeof SiteSlugRoute
+  '/site/$slug': typeof SiteSlugRouteWithChildren
+  '/site/$slug/admin': typeof SiteSlugAdminRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -88,7 +96,8 @@ export interface FileRoutesById {
   '/create': typeof CreateRoute
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
-  '/site/$slug': typeof SiteSlugRoute
+  '/site/$slug': typeof SiteSlugRouteWithChildren
+  '/site/$slug/admin': typeof SiteSlugAdminRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -101,6 +110,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/site/$slug'
+    | '/site/$slug/admin'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -111,6 +121,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/site/$slug'
+    | '/site/$slug/admin'
   id:
     | '__root__'
     | '/'
@@ -121,6 +132,7 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/site/$slug'
+    | '/site/$slug/admin'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -131,7 +143,7 @@ export interface RootRouteChildren {
   CreateRoute: typeof CreateRoute
   GalleryRoute: typeof GalleryRoute
   ServicesRoute: typeof ServicesRoute
-  SiteSlugRoute: typeof SiteSlugRoute
+  SiteSlugRoute: typeof SiteSlugRouteWithChildren
 }
 
 declare module '@tanstack/react-router' {
@@ -192,8 +204,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/site/$slug/admin': {
+      id: '/site/$slug/admin'
+      path: '/admin'
+      fullPath: '/site/$slug/admin'
+      preLoaderRoute: typeof SiteSlugAdminRouteImport
+      parentRoute: typeof SiteSlugRoute
+    }
   }
 }
+
+interface SiteSlugRouteChildren {
+  SiteSlugAdminRoute: typeof SiteSlugAdminRoute
+}
+
+const SiteSlugRouteChildren: SiteSlugRouteChildren = {
+  SiteSlugAdminRoute: SiteSlugAdminRoute,
+}
+
+const SiteSlugRouteWithChildren = SiteSlugRoute._addFileChildren(
+  SiteSlugRouteChildren,
+)
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
@@ -203,7 +234,7 @@ const rootRouteChildren: RootRouteChildren = {
   CreateRoute: CreateRoute,
   GalleryRoute: GalleryRoute,
   ServicesRoute: ServicesRoute,
-  SiteSlugRoute: SiteSlugRoute,
+  SiteSlugRoute: SiteSlugRouteWithChildren,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
