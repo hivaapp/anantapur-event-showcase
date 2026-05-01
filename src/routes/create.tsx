@@ -87,7 +87,8 @@ function CreatePage() {
   function handleCreate() {
     if (!type || !draft) return;
     const slug = uniqueSlug(draft.brand.name);
-    saveSite({ slug, type, createdAt: Date.now(), content: draft });
+    saveSite({ slug, type, createdAt: Date.now(), content: draft, enabled: true });
+    refreshSites();
     toast.success("Website created!");
     navigate({ to: "/site/$slug", params: { slug } });
   }
