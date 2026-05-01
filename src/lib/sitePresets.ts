@@ -334,7 +334,11 @@ export type StoredSite = {
   type: SiteType;
   createdAt: number;
   content: SiteContent;
+  enabled?: boolean;
+  passcode?: string;
 };
+
+export const DEFAULT_SITE_PASSCODE = "admin1234";
 
 export function slugify(s: string): string {
   return s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "site";
@@ -349,14 +353,53 @@ export function loadSites(): Record<string, StoredSite> {
   }
 }
 
-export function saveSite(site: StoredSite) {
-  const all = loadSites();
-  all[site.slug] = site;
+function persist(all: Record<string, StoredSite>) {
   localStorage.setItem(SITES_KEY, JSON.stringify(all));
 }
 
+export function saveSite(site: StoredSite) {
+  const all = loadSites();
+  all[site.slug] = {
+    enabled: true,
+    passcode: DEFAULT_SITE_PASSCODE,
+    ...all[site.slug],
+    ...site,
+  };
+  persist(all);
+}
+
 export function getSite(slug: string): StoredSite | null {
-  return loadSites()[slug] ?? null;
+  const s = loadSites()[slug];
+  if (!s) return null;
+  // Backfill defaults for older saved sites
+  return { enabled: true, passcode: DEFAULT_SITE_PASSCODE, ...s };
+}
+
+export function deleteSite(slug: string) {
+  const all = loadSites();
+  delete all[slug];
+  persist(all);
+}
+
+export function setSiteEnabled(slug: string, enabled: boolean) {
+  const all = loadSites();
+  if (!all[slug]) return;
+  all[slug] = { ...all[slug], enabled };
+  persist(all);
+}
+
+export function setSitePasscode(slug: string, passcode: string) {
+  const all = loadSites();
+  if (!all[slug]) return;
+  all[slug] = { ...all[slug], passcode };
+  persist(all);
+}
+
+export function updateSiteContent(slug: string, content: SiteContent) {
+  const all = loadSites();
+  if (!all[slug]) return;
+  all[slug] = { ...all[slug], content };
+  persist(all);
 }
 
 export function uniqueSlug(name: string): string {
