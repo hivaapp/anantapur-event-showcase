@@ -18,7 +18,7 @@ function SitePage() {
     setSite(getSite(slug));
   }, [slug]);
 
-  const styleVars = useMemo(() => (site ? themeStyleVars(site.type) : {}), [site]);
+  const styleVars = useMemo(() => (site ? themeStyleVars(site) : {}), [site]);
 
   if (site === undefined) {
     return (
