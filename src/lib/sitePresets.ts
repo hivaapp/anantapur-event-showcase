@@ -441,14 +441,30 @@ export function uniqueSlug(name: string): string {
   return `${base}-${i}`;
 }
 
-// Apply theme tokens to :root style scope
-export function themeStyleVars(type: SiteType): Record<string, string> {
-  const t = TYPES[type].theme;
+// Apply theme tokens to :root style scope.
+// Accepts either a SiteType (legacy) or a StoredSite (preferred — honors themeOverride/themeId).
+export function themeStyleVars(input: SiteType | StoredSite): Record<string, string> {
+  let theme: ThemePreset;
+  if (typeof input === "string") {
+    theme = TYPES[input].theme;
+  } else {
+    theme = input.themeOverride
+      ?? getPalette(input.themeId)?.theme
+      ?? TYPES[input.type].theme;
+  }
   return {
-    "--marigold": t.primary,
-    "--rose-soft": t.rose,
-    "--sky-soft": t.sky,
-    "--amber-soft": t.amber,
+    "--marigold": theme.primary,
+    "--rose-soft": theme.rose,
+    "--sky-soft": theme.sky,
+    "--amber-soft": theme.amber,
   };
+}
+
+export function setSiteTheme(slug: string, themeId: string) {
+  const all = loadSites();
+  if (!all[slug]) return;
+  const palette = getPalette(themeId);
+  all[slug] = { ...all[slug], themeId, themeOverride: palette?.theme };
+  persist(all);
 }
 
