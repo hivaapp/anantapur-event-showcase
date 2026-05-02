@@ -13,11 +13,13 @@ import {
   updateSiteContent,
   setSiteEnabled,
   setSitePasscode,
+  setSiteTheme,
   deleteSite,
   themeStyleVars,
   type StoredSite,
   DEFAULT_SITE_PASSCODE,
 } from "@/lib/sitePresets";
+import { ThemePicker } from "@/components/ThemePicker";
 import { uid, type SiteContent, type ServiceItem, type GalleryItem, type Faq, type Stat } from "@/lib/content";
 
 export const Route = createFileRoute("/site/$slug/admin")({
@@ -44,7 +46,7 @@ function SiteAdminPage() {
     }
   }, [slug, sessionKey]);
 
-  const styleVars = useMemo(() => (site ? themeStyleVars(site.type) : {}), [site]);
+  const styleVars = useMemo(() => (site ? themeStyleVars(site) : {}), [site]);
 
   if (site === undefined) return <div className="min-h-dvh flex items-center justify-center text-sm text-muted-foreground">Loading…</div>;
 
@@ -199,6 +201,7 @@ function SiteEditor({
           <TabsTrigger value="gallery">Gallery</TabsTrigger>
           <TabsTrigger value="faqs">FAQs</TabsTrigger>
           <TabsTrigger value="cta">CTA</TabsTrigger>
+          <TabsTrigger value="theme">Theme</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
@@ -209,6 +212,9 @@ function SiteEditor({
         <TabsContent value="gallery"><GalleryTab draft={draft} update={update} /></TabsContent>
         <TabsContent value="faqs"><FaqsTab draft={draft} update={update} /></TabsContent>
         <TabsContent value="cta"><CtaTab draft={draft} update={update} /></TabsContent>
+        <TabsContent value="theme">
+          <ThemeTab site={site} onChange={onChange} />
+        </TabsContent>
         <TabsContent value="settings">
           <SettingsTab site={site} onChange={onChange} />
         </TabsContent>
@@ -441,6 +447,28 @@ function CtaTab({ draft, update }: TabProps) {
     <Card title="Closing call-to-action">
       <Field label="Heading"><Input value={c.heading} onChange={(e) => set({ heading: e.target.value })} /></Field>
       <Field label="Subheading"><Textarea value={c.subheading} onChange={(e) => set({ subheading: e.target.value })} rows={2} /></Field>
+    </Card>
+  );
+}
+
+function ThemeTab({ site, onChange }: { site: StoredSite; onChange: (s: StoredSite) => void }) {
+  const current = site.themeId ?? "marigold";
+  return (
+    <Card title="Theme color">
+      <p className="text-sm text-muted-foreground -mt-1">
+        Pick a palette — it instantly tints buttons, accents and backgrounds across your site. Changes save immediately.
+      </p>
+      <ThemePicker
+        value={current}
+        onChange={(id) => {
+          setSiteTheme(site.slug, id);
+          const updated = { ...site, themeId: id };
+          // Re-fetch to pick up resolved themeOverride
+          const fresh = getSite(site.slug);
+          onChange(fresh ?? updated);
+          toast.success("Theme updated.");
+        }}
+      />
     </Card>
   );
 }

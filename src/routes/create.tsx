@@ -6,7 +6,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
-import { TYPES, type SiteType, buildSiteContent, saveSite, uniqueSlug, loadSites, deleteSite, setSiteEnabled, type StoredSite } from "@/lib/sitePresets";
+import { TYPES, type SiteType, buildSiteContent, saveSite, uniqueSlug, loadSites, deleteSite, setSiteEnabled, THEME_PALETTES, getPalette, type StoredSite } from "@/lib/sitePresets";
+import { ThemePicker } from "@/components/ThemePicker";
 import type { SiteContent, ServiceItem, Faq, GalleryItem } from "@/lib/content";
 import { uid } from "@/lib/content";
 import { toast } from "sonner";
@@ -38,6 +39,15 @@ const schema = z.object({
 const CREATE_PASSCODE_KEY = "site_builder_passcode_v1";
 const CREATE_SESSION_KEY = "site_builder_session_v1";
 const CREATE_DEFAULT_PASSCODE = "builder2026";
+
+const DEFAULT_THEME_FOR_TYPE: Record<SiteType, string> = {
+  event: "marigold",
+  jewellery: "gold",
+  photography: "graphite",
+  realestate: "ocean",
+  hospital: "ocean",
+  custom: "violet",
+};
 
 function CreatePage() {
   const [authed, setAuthed] = useState(false);
@@ -108,6 +118,7 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [draft, setDraft] = useState<SiteContent | null>(null);
+  const [themeId, setThemeId] = useState<string>("marigold");
 
   const [sites, setSites] = useState<StoredSite[]>([]);
   const refreshSites = () => setSites(Object.values(loadSites()).sort((a, b) => b.createdAt - a.createdAt));
@@ -115,6 +126,7 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
 
   function pickType(t: SiteType) {
     setType(t);
+    setThemeId(DEFAULT_THEME_FOR_TYPE[t] ?? "marigold");
     setStep(2);
   }
 
@@ -144,7 +156,8 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
   function handleCreate() {
     if (!type || !draft) return;
     const slug = uniqueSlug(draft.brand.name);
-    saveSite({ slug, type, createdAt: Date.now(), content: draft, enabled: true });
+    const palette = getPalette(themeId);
+    saveSite({ slug, type, createdAt: Date.now(), content: draft, enabled: true, themeId, themeOverride: palette?.theme });
     refreshSites();
     toast.success("Website created!");
     navigate({ to: "/site/$slug", params: { slug } });
@@ -277,6 +290,8 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
             type={type}
             draft={draft}
             setDraft={setDraft}
+            themeId={themeId}
+            setThemeId={setThemeId}
             onBack={() => setStep(2)}
             onCreate={handleCreate}
           />
@@ -355,12 +370,16 @@ function EditStep({
   type,
   draft,
   setDraft,
+  themeId,
+  setThemeId,
   onBack,
   onCreate,
 }: {
   type: SiteType;
   draft: SiteContent;
   setDraft: (c: SiteContent) => void;
+  themeId: string;
+  setThemeId: (id: string) => void;
   onBack: () => void;
   onCreate: () => void;
 }) {
@@ -407,8 +426,15 @@ function EditStep({
     patch("gallery", draft.gallery.filter((g) => g.id !== id));
   }
 
+  const previewVars = (getPalette(themeId)?.theme) ? {
+    "--marigold": getPalette(themeId)!.theme.primary,
+    "--rose-soft": getPalette(themeId)!.theme.rose,
+    "--sky-soft": getPalette(themeId)!.theme.sky,
+    "--amber-soft": getPalette(themeId)!.theme.amber,
+  } as React.CSSProperties : {};
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" style={previewVars}>
       <div className="bg-card border border-border rounded-3xl p-6 lg:p-8 shadow-xl">
         <div className="flex items-center justify-between pb-5 border-b border-border mb-6">
           <div className="flex items-center gap-3">
@@ -421,6 +447,12 @@ function EditStep({
           <button type="button" onClick={onBack} className="text-xs uppercase tracking-widest text-muted-foreground hover:text-marigold inline-flex items-center gap-1">
             <ArrowLeft className="size-3.5" /> Edit details
           </button>
+        </div>
+
+        <SectionTitle>Theme color</SectionTitle>
+        <div className="mb-8">
+          <ThemePicker value={themeId} onChange={setThemeId} />
+          <p className="text-[11px] text-muted-foreground mt-2">Pick a palette — it instantly tints buttons, accents and section backgrounds across the site.</p>
         </div>
 
         <SectionTitle>Brand</SectionTitle>
