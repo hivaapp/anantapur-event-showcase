@@ -13,11 +13,13 @@ import {
   updateSiteContent,
   setSiteEnabled,
   setSitePasscode,
+  setSiteTheme,
   deleteSite,
   themeStyleVars,
   type StoredSite,
   DEFAULT_SITE_PASSCODE,
 } from "@/lib/sitePresets";
+import { ThemePicker } from "@/components/ThemePicker";
 import { uid, type SiteContent, type ServiceItem, type GalleryItem, type Faq, type Stat } from "@/lib/content";
 
 export const Route = createFileRoute("/site/$slug/admin")({
