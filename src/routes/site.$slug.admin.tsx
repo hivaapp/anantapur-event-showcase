@@ -183,12 +183,6 @@ function SiteEditor({
           <Button asChild variant="outline" size="sm">
             <Link to="/site/$slug" params={{ slug: site.slug }}><Eye className="size-4" />Preview</Link>
           </Button>
-          <Button onClick={toggleEnabled} variant="outline" size="sm">
-            <Power className="size-4" />{enabled ? "Disable" : "Enable"}
-          </Button>
-          <Button onClick={onDelete} variant="outline" size="sm" className="text-destructive hover:text-destructive">
-            <Trash2 className="size-4" />Delete
-          </Button>
           <Button onClick={onLogout} variant="ghost" size="sm"><LogOut className="size-4" />Logout</Button>
           <Button onClick={save} disabled={!dirty} size="sm" className="bg-marigold hover:bg-marigold/90">
             <Save className="size-4" />{dirty ? "Save" : "Saved"}
