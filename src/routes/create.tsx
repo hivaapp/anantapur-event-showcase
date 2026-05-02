@@ -35,7 +35,64 @@ const schema = z.object({
   instagram: z.string().trim().url("Invalid URL").max(200).optional().or(z.literal("")),
 });
 
+const CREATE_PASSCODE_KEY = "site_builder_passcode_v1";
+const CREATE_SESSION_KEY = "site_builder_session_v1";
+const CREATE_DEFAULT_PASSCODE = "builder2026";
+
 function CreatePage() {
+  const [authed, setAuthed] = useState(false);
+  const [hydrated, setHydrated] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    if (!localStorage.getItem(CREATE_PASSCODE_KEY)) {
+      localStorage.setItem(CREATE_PASSCODE_KEY, CREATE_DEFAULT_PASSCODE);
+    }
+    setAuthed(sessionStorage.getItem(CREATE_SESSION_KEY) === "1");
+    setHydrated(true);
+  }, []);
+
+  if (!hydrated) return null;
+  if (!authed) return <CreateGate onSuccess={() => { sessionStorage.setItem(CREATE_SESSION_KEY, "1"); setAuthed(true); }} />;
+  return <CreateBuilder onLogout={() => { sessionStorage.removeItem(CREATE_SESSION_KEY); setAuthed(false); }} />;
+}
+
+function CreateGate({ onSuccess }: { onSuccess: () => void }) {
+  const [code, setCode] = useState("");
+  const [err, setErr] = useState("");
+  return (
+    <div className="min-h-dvh flex items-center justify-center bg-gradient-to-br from-background via-rose-soft/10 to-sky-soft/10 px-4">
+      <div className="w-full max-w-md p-8 rounded-3xl bg-card border border-border shadow-xl">
+        <div className="size-14 rounded-2xl bg-marigold/10 flex items-center justify-center mb-5">
+          <Lock className="size-6 text-marigold" />
+        </div>
+        <h1 className="text-3xl font-serif italic mb-2">Site Builder</h1>
+        <p className="text-sm text-muted-foreground mb-6">Enter the builder passcode to continue.</p>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            const expected = localStorage.getItem(CREATE_PASSCODE_KEY) || CREATE_DEFAULT_PASSCODE;
+            if (code === expected) onSuccess();
+            else setErr("Incorrect passcode.");
+          }}
+          className="space-y-4"
+        >
+          <div>
+            <Label htmlFor="builder-passcode">Passcode</Label>
+            <Input id="builder-passcode" type="password" value={code} onChange={(e) => { setCode(e.target.value); setErr(""); }} autoFocus className="mt-1.5" />
+            {err && <p className="text-xs text-destructive mt-2">{err}</p>}
+          </div>
+          <Button type="submit" className="w-full">Sign In</Button>
+          <p className="text-[11px] text-muted-foreground text-center">
+            Default passcode: <code className="px-1.5 py-0.5 rounded bg-muted">{CREATE_DEFAULT_PASSCODE}</code>
+          </p>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function CreateBuilder({ onLogout }: { onLogout: () => void }) {
   const navigate = useNavigate();
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [type, setType] = useState<SiteType | null>(null);
