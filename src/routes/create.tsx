@@ -426,8 +426,15 @@ function EditStep({
     patch("gallery", draft.gallery.filter((g) => g.id !== id));
   }
 
+  const previewVars = (getPalette(themeId)?.theme) ? {
+    "--marigold": getPalette(themeId)!.theme.primary,
+    "--rose-soft": getPalette(themeId)!.theme.rose,
+    "--sky-soft": getPalette(themeId)!.theme.sky,
+    "--amber-soft": getPalette(themeId)!.theme.amber,
+  } as React.CSSProperties : {};
+
   return (
-    <div className="space-y-8">
+    <div className="space-y-8" style={previewVars}>
       <div className="bg-card border border-border rounded-3xl p-6 lg:p-8 shadow-xl">
         <div className="flex items-center justify-between pb-5 border-b border-border mb-6">
           <div className="flex items-center gap-3">
