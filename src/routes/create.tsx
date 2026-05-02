@@ -40,6 +40,15 @@ const CREATE_PASSCODE_KEY = "site_builder_passcode_v1";
 const CREATE_SESSION_KEY = "site_builder_session_v1";
 const CREATE_DEFAULT_PASSCODE = "builder2026";
 
+const DEFAULT_THEME_FOR_TYPE: Record<SiteType, string> = {
+  event: "marigold",
+  jewellery: "gold",
+  photography: "graphite",
+  realestate: "ocean",
+  hospital: "ocean",
+  custom: "violet",
+};
+
 function CreatePage() {
   const [authed, setAuthed] = useState(false);
   const [hydrated, setHydrated] = useState(false);
