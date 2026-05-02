@@ -156,7 +156,8 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
   function handleCreate() {
     if (!type || !draft) return;
     const slug = uniqueSlug(draft.brand.name);
-    saveSite({ slug, type, createdAt: Date.now(), content: draft, enabled: true });
+    const palette = getPalette(themeId);
+    saveSite({ slug, type, createdAt: Date.now(), content: draft, enabled: true, themeId, themeOverride: palette?.theme });
     refreshSites();
     toast.success("Website created!");
     navigate({ to: "/site/$slug", params: { slug } });
