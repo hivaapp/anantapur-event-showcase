@@ -109,6 +109,7 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [draft, setDraft] = useState<SiteContent | null>(null);
+  const [themeId, setThemeId] = useState<string>("marigold");
 
   const [sites, setSites] = useState<StoredSite[]>([]);
   const refreshSites = () => setSites(Object.values(loadSites()).sort((a, b) => b.createdAt - a.createdAt));
@@ -116,6 +117,7 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
 
   function pickType(t: SiteType) {
     setType(t);
+    setThemeId(DEFAULT_THEME_FOR_TYPE[t] ?? "marigold");
     setStep(2);
   }
 
