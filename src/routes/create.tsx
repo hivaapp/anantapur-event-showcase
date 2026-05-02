@@ -370,12 +370,16 @@ function EditStep({
   type,
   draft,
   setDraft,
+  themeId,
+  setThemeId,
   onBack,
   onCreate,
 }: {
   type: SiteType;
   draft: SiteContent;
   setDraft: (c: SiteContent) => void;
+  themeId: string;
+  setThemeId: (id: string) => void;
   onBack: () => void;
   onCreate: () => void;
 }) {
