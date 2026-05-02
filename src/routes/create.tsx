@@ -159,9 +159,12 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
           <Link to="/" className="text-lg font-serif italic font-bold text-marigold inline-flex items-center gap-2">
             <Wand2 className="size-4" /> Site Builder
           </Link>
-          <Link to="/" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-marigold">
-            ← Back to template
-          </Link>
+          <div className="flex items-center gap-3">
+            <Link to="/" className="text-xs uppercase tracking-widest text-muted-foreground hover:text-marigold">
+              ← Back to template
+            </Link>
+            <Button onClick={onLogout} variant="ghost" size="sm">Logout</Button>
+          </div>
         </div>
       </header>
 
