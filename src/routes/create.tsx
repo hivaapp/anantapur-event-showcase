@@ -442,6 +442,12 @@ function EditStep({
           </button>
         </div>
 
+        <SectionTitle>Theme color</SectionTitle>
+        <div className="mb-8">
+          <ThemePicker value={themeId} onChange={setThemeId} />
+          <p className="text-[11px] text-muted-foreground mt-2">Pick a palette — it instantly tints buttons, accents and section backgrounds across the site.</p>
+        </div>
+
         <SectionTitle>Brand</SectionTitle>
         <div className="grid sm:grid-cols-2 gap-4 mb-8">
           <Field label="Name" name="brandName">
