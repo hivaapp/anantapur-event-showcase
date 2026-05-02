@@ -1,4 +1,4 @@
-import { createFileRoute, Link } from "@tanstack/react-router";
+import { createFileRoute, Link, Outlet, useChildMatches } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { ContentProvider } from "@/lib/content";
 import { SiteHome } from "@/components/SiteHome";
@@ -10,6 +10,8 @@ export const Route = createFileRoute("/site/$slug")({
 
 function SitePage() {
   const { slug } = Route.useParams();
+  const childMatches = useChildMatches();
+  if (childMatches.length > 0) return <Outlet />;
   const [site, setSite] = useState<StoredSite | null | undefined>(undefined);
 
   useEffect(() => {
