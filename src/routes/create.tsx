@@ -290,6 +290,8 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
             type={type}
             draft={draft}
             setDraft={setDraft}
+            themeId={themeId}
+            setThemeId={setThemeId}
             onBack={() => setStep(2)}
             onCreate={handleCreate}
           />
