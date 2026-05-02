@@ -336,9 +336,39 @@ export type StoredSite = {
   content: SiteContent;
   enabled?: boolean;
   passcode?: string;
+  themeId?: string;
+  themeOverride?: ThemePreset;
 };
 
 export const DEFAULT_SITE_PASSCODE = "admin1234";
+
+// Curated palettes users can pick from
+export type PaletteOption = { id: string; label: string; swatch: string; theme: ThemePreset };
+
+export const THEME_PALETTES: PaletteOption[] = [
+  { id: "marigold",  label: "Marigold",   swatch: "#E8A93B",
+    theme: { primary: "oklch(0.74 0.17 60)",  rose: "oklch(0.92 0.05 20)",  sky: "oklch(0.92 0.05 230)", amber: "oklch(0.93 0.07 80)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "rose",      label: "Rose",       swatch: "#E26B8A",
+    theme: { primary: "oklch(0.68 0.18 10)",  rose: "oklch(0.93 0.05 10)",  sky: "oklch(0.93 0.04 320)", amber: "oklch(0.93 0.06 70)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "gold",      label: "Royal Gold", swatch: "#C99A3B",
+    theme: { primary: "oklch(0.72 0.15 75)",  rose: "oklch(0.93 0.04 30)",  sky: "oklch(0.94 0.03 80)",  amber: "oklch(0.92 0.09 85)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "emerald",   label: "Emerald",    swatch: "#2EA47A",
+    theme: { primary: "oklch(0.62 0.14 160)", rose: "oklch(0.93 0.04 150)", sky: "oklch(0.93 0.04 200)", amber: "oklch(0.93 0.06 90)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "ocean",     label: "Ocean",      swatch: "#2D8FB8",
+    theme: { primary: "oklch(0.6 0.14 230)",  rose: "oklch(0.94 0.03 200)", sky: "oklch(0.93 0.06 230)", amber: "oklch(0.94 0.04 150)", fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "teal",      label: "Teal",       swatch: "#1F9C97",
+    theme: { primary: "oklch(0.62 0.12 195)", rose: "oklch(0.93 0.04 200)", sky: "oklch(0.92 0.05 220)", amber: "oklch(0.93 0.06 90)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "violet",    label: "Violet",     swatch: "#8B5BD6",
+    theme: { primary: "oklch(0.65 0.18 300)", rose: "oklch(0.93 0.04 320)", sky: "oklch(0.93 0.05 250)", amber: "oklch(0.93 0.06 80)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "graphite",  label: "Graphite",   swatch: "#525866",
+    theme: { primary: "oklch(0.45 0.04 260)", rose: "oklch(0.94 0.02 20)",  sky: "oklch(0.92 0.03 240)", amber: "oklch(0.94 0.04 70)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+  { id: "sunset",    label: "Sunset",     swatch: "#E0593A",
+    theme: { primary: "oklch(0.68 0.18 35)",  rose: "oklch(0.93 0.05 25)",  sky: "oklch(0.93 0.04 280)", amber: "oklch(0.93 0.07 70)",  fontSerif: FONT_SERIF, fontSans: FONT_SANS } },
+];
+
+export function getPalette(id?: string): PaletteOption | undefined {
+  return THEME_PALETTES.find((p) => p.id === id);
+}
 
 export function slugify(s: string): string {
   return s.toLowerCase().trim().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "").slice(0, 40) || "site";
