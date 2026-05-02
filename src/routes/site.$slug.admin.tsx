@@ -44,7 +44,7 @@ function SiteAdminPage() {
     }
   }, [slug, sessionKey]);
 
-  const styleVars = useMemo(() => (site ? themeStyleVars(site.type) : {}), [site]);
+  const styleVars = useMemo(() => (site ? themeStyleVars(site) : {}), [site]);
 
   if (site === undefined) return <div className="min-h-dvh flex items-center justify-center text-sm text-muted-foreground">Loading…</div>;
 
