@@ -201,6 +201,7 @@ function SiteEditor({
           <TabsTrigger value="gallery">Gallery</TabsTrigger>
           <TabsTrigger value="faqs">FAQs</TabsTrigger>
           <TabsTrigger value="cta">CTA</TabsTrigger>
+          <TabsTrigger value="theme">Theme</TabsTrigger>
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
@@ -211,6 +212,9 @@ function SiteEditor({
         <TabsContent value="gallery"><GalleryTab draft={draft} update={update} /></TabsContent>
         <TabsContent value="faqs"><FaqsTab draft={draft} update={update} /></TabsContent>
         <TabsContent value="cta"><CtaTab draft={draft} update={update} /></TabsContent>
+        <TabsContent value="theme">
+          <ThemeTab site={site} onChange={onChange} />
+        </TabsContent>
         <TabsContent value="settings">
           <SettingsTab site={site} onChange={onChange} />
         </TabsContent>
