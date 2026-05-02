@@ -451,6 +451,28 @@ function CtaTab({ draft, update }: TabProps) {
   );
 }
 
+function ThemeTab({ site, onChange }: { site: StoredSite; onChange: (s: StoredSite) => void }) {
+  const current = site.themeId ?? "marigold";
+  return (
+    <Card title="Theme color">
+      <p className="text-sm text-muted-foreground -mt-1">
+        Pick a palette — it instantly tints buttons, accents and backgrounds across your site. Changes save immediately.
+      </p>
+      <ThemePicker
+        value={current}
+        onChange={(id) => {
+          setSiteTheme(site.slug, id);
+          const updated = { ...site, themeId: id };
+          // Re-fetch to pick up resolved themeOverride
+          const fresh = getSite(site.slug);
+          onChange(fresh ?? updated);
+          toast.success("Theme updated.");
+        }}
+      />
+    </Card>
+  );
+}
+
 function SettingsTab({ site, onChange }: { site: StoredSite; onChange: (s: StoredSite) => void }) {
   const [next, setNext] = useState("");
   const [confirmCode, setConfirmCode] = useState("");
