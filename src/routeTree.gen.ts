@@ -17,7 +17,11 @@ import { Route as AdminRouteImport } from './routes/admin'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as SiteSlugRouteImport } from './routes/site.$slug'
+import { Route as SiteSlugServicesRouteImport } from './routes/site.$slug.services'
+import { Route as SiteSlugGalleryRouteImport } from './routes/site.$slug.gallery'
+import { Route as SiteSlugContactRouteImport } from './routes/site.$slug.contact'
 import { Route as SiteSlugAdminRouteImport } from './routes/site.$slug.admin'
+import { Route as SiteSlugAboutRouteImport } from './routes/site.$slug.about'
 
 const ServicesRoute = ServicesRouteImport.update({
   id: '/services',
@@ -59,9 +63,29 @@ const SiteSlugRoute = SiteSlugRouteImport.update({
   path: '/site/$slug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const SiteSlugServicesRoute = SiteSlugServicesRouteImport.update({
+  id: '/services',
+  path: '/services',
+  getParentRoute: () => SiteSlugRoute,
+} as any)
+const SiteSlugGalleryRoute = SiteSlugGalleryRouteImport.update({
+  id: '/gallery',
+  path: '/gallery',
+  getParentRoute: () => SiteSlugRoute,
+} as any)
+const SiteSlugContactRoute = SiteSlugContactRouteImport.update({
+  id: '/contact',
+  path: '/contact',
+  getParentRoute: () => SiteSlugRoute,
+} as any)
 const SiteSlugAdminRoute = SiteSlugAdminRouteImport.update({
   id: '/admin',
   path: '/admin',
+  getParentRoute: () => SiteSlugRoute,
+} as any)
+const SiteSlugAboutRoute = SiteSlugAboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => SiteSlugRoute,
 } as any)
 
@@ -74,7 +98,11 @@ export interface FileRoutesByFullPath {
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/site/$slug': typeof SiteSlugRouteWithChildren
+  '/site/$slug/about': typeof SiteSlugAboutRoute
   '/site/$slug/admin': typeof SiteSlugAdminRoute
+  '/site/$slug/contact': typeof SiteSlugContactRoute
+  '/site/$slug/gallery': typeof SiteSlugGalleryRoute
+  '/site/$slug/services': typeof SiteSlugServicesRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -85,7 +113,11 @@ export interface FileRoutesByTo {
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/site/$slug': typeof SiteSlugRouteWithChildren
+  '/site/$slug/about': typeof SiteSlugAboutRoute
   '/site/$slug/admin': typeof SiteSlugAdminRoute
+  '/site/$slug/contact': typeof SiteSlugContactRoute
+  '/site/$slug/gallery': typeof SiteSlugGalleryRoute
+  '/site/$slug/services': typeof SiteSlugServicesRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -97,7 +129,11 @@ export interface FileRoutesById {
   '/gallery': typeof GalleryRoute
   '/services': typeof ServicesRoute
   '/site/$slug': typeof SiteSlugRouteWithChildren
+  '/site/$slug/about': typeof SiteSlugAboutRoute
   '/site/$slug/admin': typeof SiteSlugAdminRoute
+  '/site/$slug/contact': typeof SiteSlugContactRoute
+  '/site/$slug/gallery': typeof SiteSlugGalleryRoute
+  '/site/$slug/services': typeof SiteSlugServicesRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -110,7 +146,11 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/site/$slug'
+    | '/site/$slug/about'
     | '/site/$slug/admin'
+    | '/site/$slug/contact'
+    | '/site/$slug/gallery'
+    | '/site/$slug/services'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -121,7 +161,11 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/site/$slug'
+    | '/site/$slug/about'
     | '/site/$slug/admin'
+    | '/site/$slug/contact'
+    | '/site/$slug/gallery'
+    | '/site/$slug/services'
   id:
     | '__root__'
     | '/'
@@ -132,7 +176,11 @@ export interface FileRouteTypes {
     | '/gallery'
     | '/services'
     | '/site/$slug'
+    | '/site/$slug/about'
     | '/site/$slug/admin'
+    | '/site/$slug/contact'
+    | '/site/$slug/gallery'
+    | '/site/$slug/services'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -204,6 +252,27 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/site/$slug/services': {
+      id: '/site/$slug/services'
+      path: '/services'
+      fullPath: '/site/$slug/services'
+      preLoaderRoute: typeof SiteSlugServicesRouteImport
+      parentRoute: typeof SiteSlugRoute
+    }
+    '/site/$slug/gallery': {
+      id: '/site/$slug/gallery'
+      path: '/gallery'
+      fullPath: '/site/$slug/gallery'
+      preLoaderRoute: typeof SiteSlugGalleryRouteImport
+      parentRoute: typeof SiteSlugRoute
+    }
+    '/site/$slug/contact': {
+      id: '/site/$slug/contact'
+      path: '/contact'
+      fullPath: '/site/$slug/contact'
+      preLoaderRoute: typeof SiteSlugContactRouteImport
+      parentRoute: typeof SiteSlugRoute
+    }
     '/site/$slug/admin': {
       id: '/site/$slug/admin'
       path: '/admin'
@@ -211,15 +280,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SiteSlugAdminRouteImport
       parentRoute: typeof SiteSlugRoute
     }
+    '/site/$slug/about': {
+      id: '/site/$slug/about'
+      path: '/about'
+      fullPath: '/site/$slug/about'
+      preLoaderRoute: typeof SiteSlugAboutRouteImport
+      parentRoute: typeof SiteSlugRoute
+    }
   }
 }
 
 interface SiteSlugRouteChildren {
+  SiteSlugAboutRoute: typeof SiteSlugAboutRoute
   SiteSlugAdminRoute: typeof SiteSlugAdminRoute
+  SiteSlugContactRoute: typeof SiteSlugContactRoute
+  SiteSlugGalleryRoute: typeof SiteSlugGalleryRoute
+  SiteSlugServicesRoute: typeof SiteSlugServicesRoute
 }
 
 const SiteSlugRouteChildren: SiteSlugRouteChildren = {
+  SiteSlugAboutRoute: SiteSlugAboutRoute,
   SiteSlugAdminRoute: SiteSlugAdminRoute,
+  SiteSlugContactRoute: SiteSlugContactRoute,
+  SiteSlugGalleryRoute: SiteSlugGalleryRoute,
+  SiteSlugServicesRoute: SiteSlugServicesRoute,
 }
 
 const SiteSlugRouteWithChildren = SiteSlugRoute._addFileChildren(
