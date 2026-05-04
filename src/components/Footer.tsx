@@ -1,6 +1,6 @@
-import { Link } from "@tanstack/react-router";
 import { Phone, MessageCircle, MapPin, Instagram } from "lucide-react";
 import { useContacts, useContent } from "@/lib/content";
+import { SectionLink } from "@/lib/siteContext";
 
 export function Footer() {
   const { PHONE, TEL_URL, WHATSAPP_URL, mapsLink, address, instagram } = useContacts();
@@ -18,10 +18,10 @@ export function Footer() {
         <div>
           <p className="text-xs uppercase tracking-widest text-marigold mb-4">Explore</p>
           <ul className="space-y-2 text-sm text-background/70">
-            <li><Link to="/services" className="hover:text-marigold">Services</Link></li>
-            <li><Link to="/gallery" className="hover:text-marigold">Gallery</Link></li>
-            <li><Link to="/about" className="hover:text-marigold">About</Link></li>
-            <li><Link to="/contact" className="hover:text-marigold">Contact</Link></li>
+            <li><SectionLink section="services" className="hover:text-marigold">Services</SectionLink></li>
+            <li><SectionLink section="gallery" className="hover:text-marigold">Gallery</SectionLink></li>
+            <li><SectionLink section="about" className="hover:text-marigold">About</SectionLink></li>
+            <li><SectionLink section="contact" className="hover:text-marigold">Contact</SectionLink></li>
           </ul>
         </div>
         <div>
@@ -35,7 +35,7 @@ export function Footer() {
         </div>
       </div>
       <div className="border-t border-background/10 py-6 text-center text-xs text-background/40 uppercase tracking-widest">
-        © {new Date().getFullYear()} {content.brand.name} · Anantapur
+        © {new Date().getFullYear()} {content.brand.name}
       </div>
     </footer>
   );
