@@ -176,7 +176,7 @@ export function SiteHome() {
                 <p className="max-w-xl mx-auto mb-8 opacity-90">{cta.subheading}</p>
                 <div className="flex flex-wrap gap-4 justify-center">
                   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-white text-marigold rounded-full font-semibold hover:scale-105 hover:shadow-2xl transition-all duration-500 shine-overlay">Chat on WhatsApp</a>
-                  <Link to="/contact" className="px-8 py-4 border border-white/40 backdrop-blur rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-500">Contact</Link>
+                  <SectionLink section="contact" className="px-8 py-4 border border-white/40 backdrop-blur rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-500">Contact</SectionLink>
                 </div>
               </div>
             </div>
