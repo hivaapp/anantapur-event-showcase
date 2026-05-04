@@ -2,6 +2,7 @@ import { createFileRoute, Link, Outlet, useChildMatches } from "@tanstack/react-
 import { useEffect, useMemo, useState } from "react";
 import { ContentProvider } from "@/lib/content";
 import { SiteHome } from "@/components/SiteHome";
+import { SiteSlugProvider } from "@/lib/siteContext";
 import { getSite, themeStyleVars, type StoredSite } from "@/lib/sitePresets";
 
 export const Route = createFileRoute("/site/$slug")({
@@ -11,7 +12,6 @@ export const Route = createFileRoute("/site/$slug")({
 function SitePage() {
   const { slug } = Route.useParams();
   const childMatches = useChildMatches();
-  if (childMatches.length > 0) return <Outlet />;
   const [site, setSite] = useState<StoredSite | null | undefined>(undefined);
 
   useEffect(() => {
@@ -19,6 +19,10 @@ function SitePage() {
   }, [slug]);
 
   const styleVars = useMemo(() => (site ? themeStyleVars(site) : {}), [site]);
+
+  // Admin sub-route handles its own auth/provider — render outlet bare.
+  const isAdmin = childMatches.some((m) => m.routeId === "/site/$slug/admin");
+  if (isAdmin) return <Outlet />;
 
   if (site === undefined) {
     return (
@@ -72,11 +76,15 @@ function SitePage() {
     );
   }
 
+  const hasChild = childMatches.length > 0;
+
   return (
     <div style={styleVars as React.CSSProperties}>
-      <ContentProvider override={site.content} readOnly>
-        <SiteHome />
-      </ContentProvider>
+      <SiteSlugProvider slug={slug}>
+        <ContentProvider override={site.content} readOnly>
+          {hasChild ? <Outlet /> : <SiteHome />}
+        </ContentProvider>
+      </SiteSlugProvider>
     </div>
   );
 }
