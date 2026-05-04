@@ -1,4 +1,3 @@
-import { Link } from "@tanstack/react-router";
 import { ArrowRight, Sparkles, Heart, Award } from "lucide-react";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
@@ -7,6 +6,7 @@ import { Reveal } from "@/components/Reveal";
 import { TestimonialsSection } from "@/components/TestimonialsSection";
 import { Accordion, AccordionItem, AccordionTrigger, AccordionContent } from "@/components/ui/accordion";
 import { useContacts, useContent } from "@/lib/content";
+import { SectionLink } from "@/lib/siteContext";
 
 const ICONS = { Heart, Sparkles, Award } as const;
 
@@ -44,9 +44,9 @@ export function SiteHome() {
                   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="group/cta relative inline-flex items-center gap-2 px-7 py-4 bg-marigold text-primary-foreground rounded-full font-semibold shadow-xl shadow-marigold/30 hover:-translate-y-1 hover:shadow-2xl hover:shadow-marigold/50 transition-all duration-500 shine-overlay">
                     {hero.ctaPrimary} <ArrowRight className="size-4 group-hover/cta:translate-x-1 transition-transform" />
                   </a>
-                  <Link to="/gallery" className="inline-flex items-center gap-2 px-7 py-4 border border-border bg-background/60 backdrop-blur rounded-full font-semibold hover:bg-accent hover:-translate-y-1 transition-all duration-500">
+                  <SectionLink section="gallery" className="inline-flex items-center gap-2 px-7 py-4 border border-border bg-background/60 backdrop-blur rounded-full font-semibold hover:bg-accent hover:-translate-y-1 transition-all duration-500">
                     {hero.ctaSecondary}
-                  </Link>
+                  </SectionLink>
                 </div>
               </Reveal>
               <Reveal variant="up" delay={420}>
@@ -103,9 +103,9 @@ export function SiteHome() {
                 <h2 className="text-4xl lg:text-5xl font-serif italic">Curated Collections</h2>
               </Reveal>
               <Reveal variant="right">
-                <Link to="/services" className="group text-sm font-semibold text-marigold inline-flex items-center gap-2 underline-grow">
+                <SectionLink section="services" className="group text-sm font-semibold text-marigold inline-flex items-center gap-2 underline-grow">
                   View all <ArrowRight className="size-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </SectionLink>
               </Reveal>
             </div>
 
@@ -176,7 +176,7 @@ export function SiteHome() {
                 <p className="max-w-xl mx-auto mb-8 opacity-90">{cta.subheading}</p>
                 <div className="flex flex-wrap gap-4 justify-center">
                   <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" className="px-8 py-4 bg-white text-marigold rounded-full font-semibold hover:scale-105 hover:shadow-2xl transition-all duration-500 shine-overlay">Chat on WhatsApp</a>
-                  <Link to="/contact" className="px-8 py-4 border border-white/40 backdrop-blur rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-500">Contact</Link>
+                  <SectionLink section="contact" className="px-8 py-4 border border-white/40 backdrop-blur rounded-full font-semibold hover:bg-white/10 hover:scale-105 transition-all duration-500">Contact</SectionLink>
                 </div>
               </div>
             </div>
