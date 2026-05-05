@@ -1,9 +1,8 @@
-import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useContacts, useContent } from "@/lib/content";
-import { SectionLink, useSiteSlug, type Section } from "@/lib/siteContext";
+import { SectionLink, type Section } from "@/lib/siteContext";
 
 const links: { section: Section; label: string }[] = [
   { section: "", label: "Home" },
