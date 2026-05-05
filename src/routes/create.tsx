@@ -456,13 +456,38 @@ function EditStep({
         </div>
 
         <SectionTitle>Brand</SectionTitle>
-        <div className="grid sm:grid-cols-2 gap-4 mb-8">
+        <div className="grid sm:grid-cols-2 gap-4 mb-4">
           <Field label="Name" name="brandName">
             <Input value={draft.brand.name} onChange={(e) => patch("brand", { ...draft.brand, name: e.target.value })} maxLength={60} />
           </Field>
           <Field label="Tagline" name="brandTagline">
             <Input value={draft.brand.tagline} onChange={(e) => patch("brand", { ...draft.brand, tagline: e.target.value })} maxLength={120} />
           </Field>
+        </div>
+        <div className="grid md:grid-cols-[240px_1fr] gap-4 mb-8 items-start">
+          <ImageUpload
+            label="Logo (optional)"
+            value={draft.brand.logo ?? ""}
+            onChange={(url) => patch("brand", { ...draft.brand, logo: url })}
+            aspect="aspect-[3/1]"
+          />
+          <div className="space-y-2">
+            <Label className="text-xs uppercase tracking-widest font-bold text-muted-foreground">
+              Logo height — {draft.brand.logoHeight ?? 40}px
+            </Label>
+            <input
+              type="range"
+              min={20}
+              max={96}
+              step={2}
+              value={draft.brand.logoHeight ?? 40}
+              onChange={(e) => patch("brand", { ...draft.brand, logoHeight: Number(e.target.value) })}
+              className="w-full accent-marigold"
+            />
+            <p className="text-[11px] text-muted-foreground">
+              Recommended: <strong>transparent PNG</strong>, ~<strong>400×120px</strong> (3:1 ratio). Header height 32–56px works best. Leave empty to show the business name as text.
+            </p>
+          </div>
         </div>
 
         <SectionTitle>Hero</SectionTitle>

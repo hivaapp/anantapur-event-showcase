@@ -302,6 +302,21 @@ function BrandTab({ draft, update }: TabProps) {
     <Card title="Brand">
       <Field label="Business name"><Input value={b.name} onChange={(e) => set({ name: e.target.value })} /></Field>
       <Field label="Tagline"><Textarea value={b.tagline} onChange={(e) => set({ tagline: e.target.value })} rows={2} /></Field>
+      <ImagePicker value={b.logo ?? ""} onChange={(v) => set({ logo: v })} label="Logo (optional)" />
+      <Field label={`Logo height — ${b.logoHeight ?? 40}px`}>
+        <input
+          type="range"
+          min={20}
+          max={96}
+          step={2}
+          value={b.logoHeight ?? 40}
+          onChange={(e) => set({ logoHeight: Number(e.target.value) })}
+          className="w-full accent-marigold"
+        />
+        <p className="text-[11px] text-muted-foreground mt-1">
+          Recommended: transparent PNG, ~400×120px (3:1 ratio). Leave logo empty to show the business name as text.
+        </p>
+      </Field>
     </Card>
   );
 }

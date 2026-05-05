@@ -1,9 +1,8 @@
-import { Link } from "@tanstack/react-router";
 import { useState } from "react";
 import { Menu, X, Phone } from "lucide-react";
 import { ThemeToggle } from "./ThemeToggle";
 import { useContacts, useContent } from "@/lib/content";
-import { SectionLink, useSiteSlug, type Section } from "@/lib/siteContext";
+import { SectionLink, type Section } from "@/lib/siteContext";
 
 const links: { section: Section; label: string }[] = [
   { section: "", label: "Home" },
@@ -17,13 +16,18 @@ export function Header() {
   const [open, setOpen] = useState(false);
   const { TEL_URL, PHONE } = useContacts();
   const { content } = useContent();
-  const slug = useSiteSlug();
+  const logo = (content.brand as any).logo as string | undefined;
+  const logoHeight = ((content.brand as any).logoHeight as number | undefined) ?? 40;
 
   return (
     <header className="sticky top-0 z-50 backdrop-blur-xl bg-background/70 border-b border-border/50">
       <div className="max-w-7xl mx-auto px-6 lg:px-10 h-20 flex items-center justify-between">
-        <SectionLink section="" className="text-2xl font-serif italic font-bold text-marigold tracking-tight">
-          {content.brand.name}
+        <SectionLink section="" className="inline-flex items-center gap-2 text-2xl font-serif italic font-bold text-marigold tracking-tight">
+          {logo ? (
+            <img src={logo} alt={content.brand.name} style={{ height: `${logoHeight}px` }} className="w-auto object-contain" />
+          ) : (
+            content.brand.name
+          )}
         </SectionLink>
 
         <nav className="hidden md:flex items-center gap-8 text-sm font-medium uppercase tracking-wider">
@@ -49,14 +53,6 @@ export function Header() {
           >
             <Phone className="size-3.5" /> Call
           </a>
-          {!slug && (
-            <Link
-              to="/create"
-              className="hidden sm:inline-flex items-center gap-1 px-4 py-2.5 rounded-full text-xs font-semibold uppercase tracking-widest border border-marigold/40 text-marigold hover:bg-marigold hover:text-primary-foreground transition-colors"
-            >
-              ✨ Create
-            </Link>
-          )}
           <button
             className="md:hidden size-10 rounded-full border border-border flex items-center justify-center"
             onClick={() => setOpen(!open)}
