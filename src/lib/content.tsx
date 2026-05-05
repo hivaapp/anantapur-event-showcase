@@ -25,6 +25,8 @@ export type SiteContent = {
   brand: {
     name: string;
     tagline: string;
+    logo?: string;
+    logoHeight?: number;
   };
   contact: {
     phone: string;
