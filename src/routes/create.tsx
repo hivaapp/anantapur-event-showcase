@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { ArrowLeft, ArrowRight, Sparkles, Wand2, Plus, Trash2, Power, Settings, ExternalLink, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Wand2, Plus, Trash2, Power, Settings, ExternalLink, Lock, Download } from "lucide-react";
+import { downloadSiteZip } from "@/lib/exportSite";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
