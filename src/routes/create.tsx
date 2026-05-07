@@ -1,7 +1,8 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { z } from "zod";
-import { ArrowLeft, ArrowRight, Sparkles, Wand2, Plus, Trash2, Power, Settings, ExternalLink, Lock } from "lucide-react";
+import { ArrowLeft, ArrowRight, Sparkles, Wand2, Plus, Trash2, Power, Settings, ExternalLink, Lock, Download } from "lucide-react";
+import { downloadSiteZip } from "@/lib/exportSite";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -340,6 +341,23 @@ function CreateBuilder({ onLogout }: { onLogout: () => void }) {
                         }}
                       >
                         <Power className="size-3.5" /> {enabled ? "Disable" : "Enable"}
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        className="rounded-full text-xs"
+                        onClick={async () => {
+                          try {
+                            toast.loading("Packaging website…", { id: `dl-${s.slug}` });
+                            await downloadSiteZip(s);
+                            toast.success("Download ready!", { id: `dl-${s.slug}` });
+                          } catch (err) {
+                            console.error(err);
+                            toast.error("Failed to package site.", { id: `dl-${s.slug}` });
+                          }
+                        }}
+                      >
+                        <Download className="size-3.5" /> Download
                       </Button>
                       <Button
                         size="sm"
