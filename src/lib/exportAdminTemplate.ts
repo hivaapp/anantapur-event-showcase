@@ -19,6 +19,7 @@ export const ADMIN_HTML = `<!doctype html>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="exportRuntime.js"></script>
+<script type="application/json" id="site-data-inline">__SITE_DATA_JSON__</script>
 <style>
   body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#fafaf7;color:#1c1917}
   h1,h2,h3{font-family:'Playfair Display',serif;font-style:italic}
