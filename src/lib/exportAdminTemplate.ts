@@ -19,6 +19,7 @@ export const ADMIN_HTML = `<!doctype html>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 <script src="exportRuntime.js"></script>
+<script type="application/json" id="site-data-inline">__SITE_DATA_JSON__</script>
 <style>
   body{font-family:'Plus Jakarta Sans',system-ui,sans-serif;background:#fafaf7;color:#1c1917}
   h1,h2,h3{font-family:'Playfair Display',serif;font-style:italic}
@@ -90,8 +91,16 @@ export const ADMIN_HTML = `<!doctype html>
   async function loadSite() {
     const local = localStorage.getItem(STORAGE_KEY);
     if (local) { try { return JSON.parse(local); } catch {} }
-    const r = await fetch("site-data.json");
-    return await r.json();
+    // Inline embedded data (works when opened via file://)
+    const inline = document.getElementById("site-data-inline");
+    if (inline && inline.textContent) {
+      try { return JSON.parse(inline.textContent); } catch {}
+    }
+    try {
+      const r = await fetch("site-data.json");
+      if (r.ok) return await r.json();
+    } catch {}
+    return { passcode: "admin1234", content: { brand: { name: "Site" }, contact:{}, hero:{}, services:[], gallery:[], faqs:[], cta:{} } };
   }
 
   function persist() {
@@ -326,7 +335,7 @@ export const ADMIN_HTML = `<!doctype html>
     sessionStorage.removeItem(SESSION_KEY); location.reload();
   });
 
-  site = await loadSite();
+  try { site = await loadSite(); } catch (e) { console.error(e); site = { passcode: "admin1234", content: { brand:{name:"Site"}, contact:{}, hero:{}, services:[], gallery:[], faqs:[], cta:{} } }; }
   gateInit();
 })();
 </script>

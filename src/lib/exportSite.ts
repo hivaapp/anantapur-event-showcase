@@ -62,7 +62,8 @@ export async function exportSiteAsZip(site: StoredSite): Promise<Blob> {
   await runtime.buildAllFiles(payload, zip);
 
   // Editable admin bundle
-  zip.file("admin.html", ADMIN_HTML);
+  const inlineJson = JSON.stringify(payload).replace(/</g, "\\u003c");
+  zip.file("admin.html", ADMIN_HTML.replace("__SITE_DATA_JSON__", inlineJson));
   zip.file("exportRuntime.js", runtimeSource);
   zip.file("site-data.json", JSON.stringify(payload, null, 2));
   zip.file("README.md", readme(site));
