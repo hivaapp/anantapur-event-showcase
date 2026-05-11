@@ -335,7 +335,7 @@ export const ADMIN_HTML = `<!doctype html>
     sessionStorage.removeItem(SESSION_KEY); location.reload();
   });
 
-  site = await loadSite();
+  try { site = await loadSite(); } catch (e) { console.error(e); site = { passcode: "admin1234", content: { brand:{name:"Site"}, contact:{}, hero:{}, services:[], gallery:[], faqs:[], cta:{} } }; }
   gateInit();
 })();
 </script>
